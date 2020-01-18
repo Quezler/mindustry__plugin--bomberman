@@ -23,10 +23,14 @@ jar{
 
 // gradle server && java -jar ./be/Mindustry-BE-Server-6814.jar
 task server(){
-    copy{
-        from "./build/libs/mindustry__plugin--bomberman.jar"
-        into "./config/mods"
-    }
-
     dependsOn "jar"
+
+    doLast{
+        copy{
+            from "./build/libs/mindustry__plugin--bomberman.jar"
+            into "./config/mods"
+        }
+
+        delete "./build/libs/mindustry__plugin--bomberman.jar"
+    }
 }
