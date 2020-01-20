@@ -1,6 +1,7 @@
 package bomberman;
 
 import arc.*;
+import arc.graphics.Color;
 import arc.struct.*;
 import arc.util.*;
 import mindustry.Vars;
@@ -9,6 +10,7 @@ import mindustry.entities.effect.*;
 import mindustry.entities.type.Player;
 import mindustry.game.*;
 import mindustry.gen.*;
+import mindustry.graphics.Pal;
 import mindustry.plugin.*;
 import mindustry.game.EventType.*;
 import mindustry.core.GameState.*;
@@ -33,6 +35,8 @@ public class BombermanMod extends Plugin{
         rules.tags.put("bomberman", "true");
         rules.infiniteResources = true;
         rules.canGameOver = false;
+        //test
+        rules.buildSpeedMultiplier = 0.5f;
 
         //Todo: check for min 2 players and have a countdown (~ 10 seconds)
         //if game is already running -> spectator mode
@@ -84,26 +88,66 @@ public class BombermanMod extends Plugin{
             if(event.breaking) return;
 
             if(event.tile.block() == Blocks.thoriumReactor) {
+                int amount;
                 //explode nuke
-                Call.transferItemTo(Items.thorium, 7, event.player.x, event.player.y, event.tile);
+                if (event.player.mech == Mechs.alpha){
+                    amount = 7;
+                } else if (event.player.mech == Mechs.delta){
+                    amount = 10;
+                } else if (event.player.mech == Mechs.tau){
+                    amount = 12;
+                } else { //omega
+                    amount = 18;
+                }
+                //TODO add a delay of 500ms
+                Call.transferItemTo(Items.thorium, amount , event.player.x, event.player.y, event.tile);
             }
         });
 
         //destroys the walls
         Events.on(BlockDestroyEvent.class, event -> {
             if(event.tile.block() != Blocks.thoriumReactor) return;
-            //TODO herschrijven
+            int x = event.tile.x;
+            int y = event.tile.y;
+            //delete vertical
+            if (!(world.tile(x-3, y).block() == generator.staticwall && world.tile(x+3, y).block() == generator.staticwall)){
+                generator.breakable.each(tile -> {
+                    if(tile.block() != Blocks.scrapWallHuge) return;
+                    if(event.tile.y == tile.y) {
+                        /*new method - not in servertestfile
+                        tile.removeNet();*/
+                        //alternative
+                        Time.run(0f, tile.entity::kill);
+                        //TODO: draw laser on airtiles
+                        tile.getLinkedTilesAs(Blocks.scrapWallLarge, new Array<>()).each(Fire::create);
+                    }
+                });
+            }
+            //delete horizontal
+            if (!(world.tile(x, y-3).block() == generator.staticwall && world.tile(x, y+3).block() == generator.staticwall)){
+                generator.breakable.each(tile -> {
+                    if(tile.block() != Blocks.scrapWallHuge) return;
+                    if(event.tile.x == tile.x) {
+                        /*new method - not in servertestfile
+                        tile.removeNet();*/
+                        //alternative
+                        Time.run(0f, tile.entity::kill);
+                        tile.getLinkedTilesAs(Blocks.scrapWallLarge, new Array<>()).each(Fire::create);
+                    }
+                });
+            }
+            /*
             generator.breakable.each(tile -> {
 
                 if(tile.block() != Blocks.scrapWallHuge) return;
                 if(event.tile.x == tile.x || event.tile.y == tile.y){
-                    /*new method - not in servertestfile
-                    tile.removeNet();*/
+                    //new method - not in servertestfile
+                    //tile.removeNet();
                     //alternative
                     Time.run(0f, tile.entity::kill);
                     tile.getLinkedTilesAs(Blocks.scrapWallLarge, new Array<>()).each(Fire::create);
                 }
-            });
+            });*/
             //TODO: check if player was in laser/fire
         });
         //what does it do
@@ -135,10 +179,10 @@ public class BombermanMod extends Plugin{
     }
 
     enum Powerup{
-        yellow(Mechs.alpha, Blocks.copperWall),
-        blue  (Mechs.delta, Blocks.titaniumWall),
-        green (Mechs.tau,   Blocks.plastaniumWall),
-        orange(Mechs.omega, Blocks.surgeWall);
+        yellow(Mechs.alpha, Blocks.copperWall), //tier 1
+        blue  (Mechs.delta, Blocks.titaniumWall), //tier 2
+        green (Mechs.tau,   Blocks.plastaniumWall), //tier 3
+        orange(Mechs.omega, Blocks.surgeWall); //slowest mech -> fastest explosion
 
 
         public final Mech mech;

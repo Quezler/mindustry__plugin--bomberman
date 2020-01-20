@@ -16,7 +16,9 @@ import static mindustry.Vars.world;
 import static arc.util.Log.info;
 
 public class BombermanGenerator extends Generator{
-    public final static Team blockteam = Team.derelict;//Team.blue;
+    public final static Team blockteam = Team.blue;
+    public final static Block staticwall = Blocks.duneRocks;
+
     public final static int worldborder = 3;
     public final static int grid = 11;
     public final static int size = (grid * 3) + (worldborder * 2);
@@ -68,12 +70,26 @@ public class BombermanGenerator extends Generator{
                 //remove corners
                 //ugly notation
                 if (
-                        (x == worldborder + 1 && y == worldborder + 1) ||
-                        (x == worldborder + 1 && y == height - worldborder - 2) ||
-                        (x == width - worldborder - 2 && y == worldborder + 1) ||
-                        (x == width - worldborder - 2 && y == height - worldborder - 2)){
+                    (x == worldborder + 1 && y == worldborder + 1) ||
+                    (x == worldborder + 1 && y == height - worldborder - 2) ||
+                    (x == width - worldborder - 2 && y == worldborder + 1) ||
+                    (x == width - worldborder - 2 && y == height - worldborder - 2)){
                     //TODO: fancy floor
-                    //fill spawn array/matrix
+                    //TODO: fill spawn array/matrix
+                    continue;
+                }
+
+                //give the players some space
+                if (
+                    (x == worldborder + 4 && y == worldborder + 1) ||
+                    (x == worldborder + 1 && y == worldborder + 4) ||
+                    (x == worldborder + 4 && y == height - worldborder - 2) ||
+                    (x == worldborder + 1 && y == height - worldborder - 5) ||
+                    (x == width - worldborder - 2 && y == worldborder + 4) ||
+                    (x == width - worldborder - 5 && y == worldborder + 1) ||
+                    (x == width - worldborder - 2 && y == height - worldborder - 5) ||
+                    (x == width - worldborder - 5 && y == height - worldborder - 2)
+                ) {
                     continue;
                 }
 
@@ -99,7 +115,7 @@ public class BombermanGenerator extends Generator{
     }
 
     enum Pallete{
-        sandy(Blocks.darksand, Blocks.duneRocks);
+        sandy(Blocks.darksand, staticwall);
 
         public final Floor floor;
         public final StaticWall wall;
