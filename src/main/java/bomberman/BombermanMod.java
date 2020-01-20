@@ -1,22 +1,18 @@
 package bomberman;
 
 import arc.*;
-import arc.graphics.Color;
 import arc.struct.*;
 import arc.util.*;
-import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.type.Player;
 import mindustry.game.*;
 import mindustry.gen.*;
-import mindustry.graphics.Pal;
 import mindustry.plugin.*;
 import mindustry.game.EventType.*;
 import mindustry.core.GameState.*;
 import mindustry.type.*;
 import mindustry.world.*;
-import mindustry.world.blocks.*;
 
 import static mindustry.Vars.*;
 import static arc.util.Log.info;
@@ -54,7 +50,7 @@ public class BombermanMod extends Plugin{
             event.player.set(generator.spawns[counter][0]*8, generator.spawns[counter][1]*8);
             //this.counter++;
             //player
-            event.player.mech = Powerup.yellow.mech;
+            event.player.mech = Powerup.copper.mech;
             event.player.heal();
         });
 
@@ -88,19 +84,10 @@ public class BombermanMod extends Plugin{
             if(event.breaking) return;
 
             if(event.tile.block() == Blocks.thoriumReactor) {
-                int amount;
-                //explode nuke
-                if (event.player.mech == Mechs.alpha){
-                    amount = 7;
-                } else if (event.player.mech == Mechs.delta){
-                    amount = 14;
-                } else if (event.player.mech == Mechs.tau){
-                    amount = 12;
-                } else { //omega
-                    amount = 20;
-                }
                 //TODO add a delay of 500ms
-                Call.transferItemTo(Items.thorium, amount , event.player.x, event.player.y, event.tile);
+                Powerup tmp = Powerup.player(event.player);
+                if(tmp == null) return;
+                Call.transferItemTo(Items.thorium, tmp.thorium, event.player.x, event.player.y, event.tile);
             }
         });
 
@@ -205,23 +192,33 @@ public class BombermanMod extends Plugin{
     }
 
     enum Powerup{
-        yellow(Mechs.alpha, Blocks.copperWall), //tier 1
-        blue  (Mechs.delta, Blocks.titaniumWall), //tier 2
-        green (Mechs.tau,   Blocks.plastaniumWall), //tier 3
-        orange(Mechs.omega, Blocks.surgeWall); //slowest mech -> fastest explosion
+        copper    (Mechs.alpha, Blocks.copperWall    ,  7),
+        titanium  (Mechs.delta, Blocks.titaniumWall  , 14),
+        plastanium(Mechs.tau  , Blocks.plastaniumWall, 12),
+        surge     (Mechs.omega, Blocks.surgeWall     , 20);
 
 
         public final Mech mech;
         public final Block block;
+        public final int thorium;
 
-        Powerup(Mech mech, Block block){
+        Powerup(Mech mech, Block block, int thorium){
             this.mech = mech;
             this.block = block;
+            this.thorium = thorium;
         }
 
         public static Powerup wall(Block block){
             for(Powerup powerup : values()){
                 if(powerup.block == block) return powerup;
+            }
+
+            return null;
+        }
+
+        public static Powerup player(Player player){
+            for(Powerup powerup : values()){
+                if(powerup.mech == player.mech) return powerup;
             }
 
             return null;
