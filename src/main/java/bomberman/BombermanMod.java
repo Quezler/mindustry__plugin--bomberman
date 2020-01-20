@@ -84,10 +84,9 @@ public class BombermanMod extends Plugin{
             if(event.breaking) return;
 
             if(event.tile.block() == Blocks.thoriumReactor) {
-                //TODO add a delay of 500ms
                 Powerup tmp = Powerup.player(event.player);
                 if(tmp == null) return;
-                Call.transferItemTo(Items.thorium, tmp.thorium, event.player.x, event.player.y, event.tile);
+                Timer.schedule(() -> Call.transferItemTo(Items.thorium, tmp.thorium, event.player.x, event.player.y, event.tile), 0.5f);
             }
         });
 
