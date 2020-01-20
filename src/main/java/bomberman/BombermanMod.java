@@ -111,7 +111,7 @@ public class BombermanMod extends Plugin{
             int y = event.tile.y;
             //delete horizontal
             boolean hdamage = false;
-            if (!(world.tile(x-3, y).block() == generator.staticwall && world.tile(x+3, y).block() == generator.staticwall)){
+            if (!(world.tile(x-3, y).block() == generator.pallete.wall && world.tile(x+3, y).block() == generator.pallete.wall)){
                 hdamage = true;
                 generator.breakable.each(tile -> {
                     if(tile.block() != Blocks.scrapWallHuge) return;
@@ -127,7 +127,7 @@ public class BombermanMod extends Plugin{
             }
             //delete vertical
             boolean vdamage = false;
-            if (!(world.tile(x, y-3).block() == generator.staticwall && world.tile(x, y+3).block() == generator.staticwall)){
+            if (!(world.tile(x, y-3).block() == generator.pallete.wall && world.tile(x, y+3).block() == generator.pallete.wall)){
                 vdamage = true;
                 generator.breakable.each(tile -> {
                     if(tile.block() != Blocks.scrapWallHuge) return;

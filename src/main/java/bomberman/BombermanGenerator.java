@@ -17,7 +17,6 @@ import static arc.util.Log.info;
 
 public class BombermanGenerator extends Generator{
     public final static Team blockteam = Team.blue;
-    public final static Block staticwall = Blocks.duneRocks;
 
     public final static int worldborder = 3;
     public final static int grid = 11;
@@ -28,15 +27,14 @@ public class BombermanGenerator extends Generator{
     //2D matrix
     public final int[][] spawns = {{34, 34}, {4, 4}, {34, 4}, {4, 34}};
 
+    public final Pallete pallete = Pallete.sandy;
+
     BombermanGenerator(){
         super(size, size);
     }
 
     @Override
     public void generate(Tile[][] tiles){
-
-        Pallete pallete = Pallete.sandy;
-
         // init stuff
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
@@ -115,7 +113,7 @@ public class BombermanGenerator extends Generator{
     }
 
     enum Pallete{
-        sandy(Blocks.darksand, staticwall);
+        sandy(Blocks.darksand, Blocks.duneRocks);
 
         public final Floor floor;
         public final StaticWall wall;
