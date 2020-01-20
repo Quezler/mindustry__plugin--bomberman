@@ -114,7 +114,7 @@ public class BombermanMod extends Plugin{
             if (!(world.tile(x-3, y).block() == generator.pallete.wall && world.tile(x+3, y).block() == generator.pallete.wall)){
                 hdamage = true;
                 generator.breakable.each(tile -> {
-                    if(tile.block() != Blocks.scrapWallHuge) return;
+                    if(tile.block() != generator.pallete.blockade) return;
                     if(event.tile.y == tile.y) {
                         /*new method - not in servertestfile
                         tile.removeNet();*/
@@ -130,7 +130,7 @@ public class BombermanMod extends Plugin{
             if (!(world.tile(x, y-3).block() == generator.pallete.wall && world.tile(x, y+3).block() == generator.pallete.wall)){
                 vdamage = true;
                 generator.breakable.each(tile -> {
-                    if(tile.block() != Blocks.scrapWallHuge) return;
+                    if(tile.block() != generator.pallete.blockade) return;
                     if(event.tile.x == tile.x) {
                         /*new method - not in servertestfile
                         tile.removeNet();*/
@@ -143,7 +143,7 @@ public class BombermanMod extends Plugin{
             /*
             generator.breakable.each(tile -> {
 
-                if(tile.block() != Blocks.scrapWallHuge) return;
+                if(tile.block() != generator.pallete.blockade) return;
                 if(event.tile.x == tile.x || event.tile.y == tile.y){
                     //new method - not in servertestfile
                     //tile.removeNet();

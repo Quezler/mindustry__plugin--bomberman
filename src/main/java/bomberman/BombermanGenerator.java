@@ -96,7 +96,7 @@ public class BombermanGenerator extends Generator{
                 breakable.add(tiles[x][y]);
 
                 //team choice is important make sure no one uses this team !
-                tiles[x][y].set(Blocks.scrapWallHuge, blockteam);
+                tiles[x][y].set(pallete.blockade, blockteam);
             }
         }
 
@@ -113,14 +113,16 @@ public class BombermanGenerator extends Generator{
     }
 
     enum Pallete{
-        sandy(Blocks.darksand, Blocks.duneRocks);
+        sandy(Blocks.darksand, Blocks.duneRocks, Blocks.scrapWallHuge);
 
         public final Floor floor;
         public final StaticWall wall;
+        public final Block blockade; // 3x3
 
-        Pallete(Block floor, Block wall){
+        Pallete(Block floor, Block wall, Block blockade){
             this.floor = (Floor)floor;
             this.wall = (StaticWall)wall;
+            this.blockade = blockade;
         }
     }
 }
