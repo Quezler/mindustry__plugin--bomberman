@@ -93,11 +93,11 @@ public class BombermanMod extends Plugin{
                 if (event.player.mech == Mechs.alpha){
                     amount = 7;
                 } else if (event.player.mech == Mechs.delta){
-                    amount = 10;
+                    amount = 14;
                 } else if (event.player.mech == Mechs.tau){
                     amount = 12;
                 } else { //omega
-                    amount = 18;
+                    amount = 20;
                 }
                 //TODO add a delay of 500ms
                 Call.transferItemTo(Items.thorium, amount , event.player.x, event.player.y, event.tile);
@@ -149,6 +149,7 @@ public class BombermanMod extends Plugin{
                 }
             });*/
             //TODO: check if player was in laser/fire
+
         });
         //what does it do
         netServer.assigner = (player, players) -> Team.sharded;
