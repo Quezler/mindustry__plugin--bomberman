@@ -63,7 +63,7 @@ public class BombermanMod extends Plugin{
             for (Player p: playerGroup){
                 if (p.getTeam() != Team.sharded) continue;
                 if (world.tile(p.tileX(), p.tileY()).block() != Blocks.air){
-                    p.sendMessage("[scarlet]FLYING OVER WALLS == CHEATING\ndisqualified!");
+                    Call.sendMessage("[scarlet]FLYING OVER WALLS == CHEATING\ndisqualified!");
                     p.setTeam(Team.green);
                     Call.onPlayerDeath(p);
                 }
@@ -109,8 +109,10 @@ public class BombermanMod extends Plugin{
             if(event.tile.block() != Blocks.thoriumReactor) return;
             int x = event.tile.x;
             int y = event.tile.y;
-            //delete vertical
+            //delete horizontal
+            boolean hdamage = false;
             if (!(world.tile(x-3, y).block() == generator.staticwall && world.tile(x+3, y).block() == generator.staticwall)){
+                hdamage = true;
                 generator.breakable.each(tile -> {
                     if(tile.block() != Blocks.scrapWallHuge) return;
                     if(event.tile.y == tile.y) {
@@ -123,8 +125,10 @@ public class BombermanMod extends Plugin{
                     }
                 });
             }
-            //delete horizontal
+            //delete vertical
+            boolean vdamage = false;
             if (!(world.tile(x, y-3).block() == generator.staticwall && world.tile(x, y+3).block() == generator.staticwall)){
+                vdamage = true;
                 generator.breakable.each(tile -> {
                     if(tile.block() != Blocks.scrapWallHuge) return;
                     if(event.tile.x == tile.x) {
@@ -148,10 +152,31 @@ public class BombermanMod extends Plugin{
                     tile.getLinkedTilesAs(Blocks.scrapWallLarge, new Array<>()).each(Fire::create);
                 }
             });*/
-            //TODO: check if player was in laser/fire
-
+            //check if player was in laser/fire
+            for (Player p: playerGroup){
+                //already dead
+                if (p.getTeam() != Team.sharded) continue;
+                if (vdamage){
+                    if (x-1 <= p.tileX() && p.tileX() <= x+1){
+                        //kill player and put on green team
+                        Call.sendMessage('\n' + p.name + "[sky] DIED");
+                        p.setTeam(Team.green);
+                        Call.onPlayerDeath(p);
+                        continue;
+                    }
+                }
+                if (hdamage){
+                    if (y-1 <= p.tileY() && p.tileY() <= y+1){
+                        //kill player and put on green team
+                        Call.sendMessage(p.name + "[sky] DIED");
+                        p.setTeam(Team.green);
+                        Call.onPlayerDeath(p);
+                    }
+                }
+            }
+            //TODO: restart condition
         });
-        //what does it do
+        //what does this do
         netServer.assigner = (player, players) -> Team.sharded;
     }
 
