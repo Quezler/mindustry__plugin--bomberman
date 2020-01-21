@@ -117,7 +117,7 @@ public class BombermanMod extends Plugin{
                 tmp = reactor.adjecent(direction);
                 do{
                     if (tmp.state == Slate.State.wall) break;
-                    if (tmp.state == Slate.State.empty) tmp.compass(Fire::create);
+                    if (tmp.state == Slate.State.empty || tmp.state.powerup()) tmp.compass(Fire::create);
 
                     if (tmp.state == Slate.State.scrap){
                         omeowamoushindeiru(tmp);
