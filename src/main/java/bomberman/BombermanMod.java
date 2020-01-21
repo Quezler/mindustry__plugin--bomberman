@@ -28,8 +28,6 @@ public class BombermanMod extends Plugin{
         rules.infiniteResources = true;
         rules.canGameOver = false;
 
-        netServer.admins.addActionFilter(new BombermanActionFilter());
-
         //Todo: check for min 2 players and have a countdown (~ 10 seconds)
         //if game is already running -> spectator mode
         Events.on(PlayerJoin.class, event -> {
