@@ -105,12 +105,12 @@ public class BombermanMod extends Plugin{
         });
 
         Events.on(BlockDestroyEvent.class, event -> {
+            slate(event.tile).state = Slate.State.empty;
             if(event.tile.block() != Blocks.thoriumReactor) return;
 
             bombs.getAndIncrement(event.tile.getTeam(), 0, -1);
             Slate reactor = slate(event.tile);
             reactor.compass(Fire::create);
-            reactor.state = Slate.State.empty;
 
             Slate tmp;
             for(Direction direction : Direction.values()){
