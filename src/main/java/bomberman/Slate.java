@@ -1,6 +1,7 @@
 package bomberman;
 
 import arc.func.*;
+import arc.math.*;
 import mindustry.world.*;
 import mindustry.content.*;
 
@@ -22,6 +23,10 @@ public class Slate{
 
     public int worldy(){
         return y * 3 + 1;
+    }
+
+    public static Slate tile(Slate[][] slates, Tile tile){
+        return slates[Mathf.floor(tile.x / 3)][Mathf.floor(tile.y / 3)];
     }
 
     public Tile center(Tile[][] tiles){

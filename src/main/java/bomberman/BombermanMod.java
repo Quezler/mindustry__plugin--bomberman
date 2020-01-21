@@ -76,6 +76,9 @@ public class BombermanMod extends Plugin{
             Powerup tmp = Powerup.wall( ((BuildEntity)event.tile.ent()).previous );
             if(tmp == null) return;
 
+            // mark tile empty
+            tileToSlate(event.tile).state = Slate.State.empty;
+
             event.player.mech = tmp.mech;
             event.player.heal();
         });
@@ -155,6 +158,14 @@ public class BombermanMod extends Plugin{
 
         //what does this do
         netServer.assigner = (player, players) -> Team.sharded;
+    }
+
+    public Tile playerToTile(Player player){
+        return world.tile(world.toTile(player.x), world.toTile(player.y));
+    }
+
+    public Slate tileToSlate(Tile tile){
+        return Slate.tile(generator.slates, tile);
     }
 
     @Override
