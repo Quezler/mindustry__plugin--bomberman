@@ -5,21 +5,20 @@ import mindustry.world.*;
 import mindustry.world.blocks.*;
 
 public enum Pallete{
-    cavern(Blocks.darksand, Blocks.duneRocks, Blocks.scrapWallHuge, Blocks.liquidVoid),
-    spored(Blocks.shale, Blocks.sporerocks, Blocks.oilExtractor, Blocks.sporePine),
-    desert(Blocks.sand, Blocks.saltRocks, Blocks.largeSolarPanel, Blocks.sandBoulder),
-    forged(Blocks.hotrock, Blocks.cliffs, Blocks.multiPress, Blocks.rock),
-    chanel(Blocks.water, Blocks.darkMetal, Blocks.liquidTank, Blocks.oreTitanium);
+    cavern(Blocks.darksand, Blocks.duneRocks,  Blocks.scrapWallHuge),
+    spored(Blocks.shale,    Blocks.sporerocks, Blocks.oilExtractor),
+    desert(Blocks.sand,     Blocks.saltRocks,  Blocks.largeSolarPanel),
+    forged(Blocks.hotrock,  Blocks.cliffs,     Blocks.multiPress),
+    chanel(Blocks.water,    Blocks.darkMetal,  Blocks.liquidTank);
 
     public final Floor floor;
     public final StaticWall wall;
     public final Block blockade;
-    public final Block fallback;
+    public final Block fallback = Blocks.liquidVoid;
 
-    Pallete(Block floor, Block wall, Block blockade, Block fallback){
+    Pallete(Block floor, Block wall, Block blockade){
         this.floor = (Floor)floor;
         this.wall = (StaticWall)wall;
         this.blockade = blockade;
-        this.fallback = fallback;
     }
 }
