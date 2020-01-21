@@ -4,7 +4,7 @@ import arc.func.*;
 import mindustry.content.*;
 import mindustry.world.*;
 
-import static bomberman.Bomberman.slates;
+import static bomberman.Bomberman.*;
 import static bomberman.BombermanGenerator.pallete;
 
 import static mindustry.Vars.world;
