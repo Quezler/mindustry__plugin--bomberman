@@ -59,12 +59,12 @@ public class BombermanMod extends Plugin{
                 // player is on the same tile as a powerup
                 if(tmp.state == Slate.State.copper || tmp.state == Slate.State.titanium || tmp.state == Slate.State.plastanium || tmp.state == Slate.State.surge){
 
-                    Powerup tmp2 = Powerup.wall( tmp.center(world.getTiles()).block() );
+                    Powerup tmp2 = Powerup.wall( tmp.center().block() );
                     if(tmp2 == null) return;
                     p.mech = tmp2.mech;
                     p.heal();
 
-                    Call.onConstructFinish(tmp.center(world.getTiles()), Blocks.air, -1, (byte)0, Team.derelict, true);
+                    Call.onConstructFinish(tmp.center(), Blocks.air, -1, (byte)0, Team.derelict, true);
                     tmp.state = Slate.State.empty;
                 }
             }

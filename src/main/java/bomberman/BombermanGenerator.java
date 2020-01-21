@@ -82,8 +82,8 @@ public class BombermanGenerator extends Generator{
             slate.state = Structs.random(Powerup.values()).slate;
         });
 
-        // draw slates (place)
-        slates(slate -> slate.draw(tiles));
+        // place slates (gen)
+        slates(Slate::place);
 
         world.setMap(new Map(StringMap.of("name", "Bomberman")));
     }
