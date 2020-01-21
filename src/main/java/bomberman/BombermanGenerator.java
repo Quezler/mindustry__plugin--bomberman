@@ -85,6 +85,6 @@ public class BombermanGenerator extends Generator{
         // place slates (gen)
         slates(Slate::place);
 
-        world.setMap(new Map(StringMap.of("name", "Bomberman")));
+        world.setMap(new Map(StringMap.of("name", mapname)));
     }
 }

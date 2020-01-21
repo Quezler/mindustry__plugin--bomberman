@@ -10,6 +10,7 @@ import static mindustry.Vars.world;
 public class Bomberman{
     public final static int grid = 15; // odd
     public final static int size = (grid * 3);
+    public final static String mapname = "[royal]Bomberman [white]\uF831";
     public static Slate[][] slates = new Slate[grid][grid];
 
     // resolve tile from player
