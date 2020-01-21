@@ -171,7 +171,7 @@ public class BombermanMod extends Plugin{
 //            //TODO: restart condition
 //        });
 
-        //what does this do
+        //what does this do - dunno, it was there in hexedmod.
         netServer.assigner = (player, players) -> Team.sharded;
     }
 
