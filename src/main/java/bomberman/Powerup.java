@@ -1,9 +1,9 @@
 package bomberman;
 
-import mindustry.content.*;
-import mindustry.entities.type.*;
 import mindustry.type.*;
 import mindustry.world.*;
+import mindustry.content.*;
+import mindustry.entities.type.*;
 
 public enum Powerup{
     copper    (Mechs.alpha, Slate.State.copper    ,  7),
