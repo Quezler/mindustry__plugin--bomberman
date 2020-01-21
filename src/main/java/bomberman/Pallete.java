@@ -9,7 +9,7 @@ public enum Pallete{
 
     public final Floor floor;
     public final StaticWall wall;
-    public final Block blockade; // 3x3
+    public final Block blockade;
     public final Block fallback;
 
     Pallete(Block floor, Block wall, Block blockade, Block fallback){
