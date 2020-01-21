@@ -2,16 +2,25 @@ package bomberman;
 
 import arc.func.*;
 import arc.math.*;
+
 import arc.struct.*;
+
 import mindustry.entities.type.*;
 import mindustry.game.*;
 import mindustry.world.*;
 
 import static mindustry.Vars.world;
 
+// constants and some utility functions
 public class Bomberman{
     public final static int grid = 15; // odd
     public final static int size = (grid * 3);
+    // team of the scrap blocks
+    public final static Team blockteam = Team.sharded; //Team.blue; //TODO change
+    //fix build wall error
+    public final static Team aliveTeam = Team.sharded;
+    //move player to this team if death
+    public final static Team deathTeam = Team.green;
     public final static String mapname = "[royal]Bomberman [white]\uF831";
     public static Slate[][] slates = new Slate[grid][grid];
     public final static Team[] teams = new Team[]{Team.crux, Team.green, Team.purple, Team.blue};

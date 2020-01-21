@@ -6,12 +6,15 @@ import mindustry.world.*;
 
 import static bomberman.Bomberman.slates;
 import static bomberman.BombermanGenerator.pallete;
+
 import static mindustry.Vars.world;
 
 public class Slate{
     short x;
     short y;
     State state = State.undefined;
+    //import fix
+    //private static Pallete pallete = Pallete.sandy;
 
     Slate(int x, int y) {
         this.x = (short)x;
@@ -46,8 +49,8 @@ public class Slate{
 
     // places either 1 big or 9 small ones
     public void place(){
-        if(state.single) center().setBlock(state.block);
-        if(!state.single) compass(tile -> tile.setBlock(state.block));
+        if(state.single) center().setBlock(state.block, (state.block == Blocks.air) ? aliveTeam : blockteam);
+        if(!state.single) compass(tile -> tile.setBlock(state.block, blockteam));
     }
 
     public Slate adjecent(Direction direction){

@@ -29,6 +29,8 @@ public class BombermanMod extends Plugin{
         rules.tags.put("bomberman", "true");
         rules.infiniteResources = true;
         rules.canGameOver = false;
+        // block all blocks except thoriumreactor
+
 
         //Todo: check for min 2 players and have a countdown (~ 10 seconds)
         //if game is already running -> spectator mode
@@ -76,6 +78,11 @@ public class BombermanMod extends Plugin{
                     p.applyEffect(StatusEffects.freezing, 60f);
                     p.applyEffect(StatusEffects.tarred, 60f);
                     p.damage(2.5f);
+                    if (p.dead){
+                        p.setTeam(deathTeam);
+                        Call.sendMessage(p.name + "[sky] DIED");
+                        //TODO: call function to check if there is only one player standing
+                    }
                 }
 
                 if(p.isBoosting){

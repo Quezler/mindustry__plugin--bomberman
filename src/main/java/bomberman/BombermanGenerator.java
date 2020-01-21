@@ -11,6 +11,7 @@ import mindustry.world.*;
 import static bomberman.Bomberman.*;
 import static mindustry.Vars.world;
 
+// class that generates the map
 public class BombermanGenerator extends Generator{
     public final int[][] spawns = {{4, 4}};
 
