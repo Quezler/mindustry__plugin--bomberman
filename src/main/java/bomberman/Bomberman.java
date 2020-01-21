@@ -12,8 +12,11 @@ import static mindustry.Vars.world;
 public class Bomberman{
     public final static int grid = 15; // odd
     public final static int size = (grid * 3);
-    public final static Team blockteam = Team.blue;
+    // team of the scrap blocks
+    public final static Team blockteam = Team.sharded; //Team.blue; //TODO change
+    //fix build wall error
     public final static Team aliveTeam = Team.sharded;
+    //move player to this team if death
     public final static Team deathTeam = Team.green;
     public final static String mapname = "[royal]Bomberman [white]\uF831";
     public static Slate[][] slates = new Slate[grid][grid];

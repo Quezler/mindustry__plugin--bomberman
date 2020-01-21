@@ -28,6 +28,8 @@ public class BombermanMod extends Plugin{
         rules.tags.put("bomberman", "true");
         rules.infiniteResources = true;
         rules.canGameOver = false;
+        // block all blocks except thoriumreactor
+
 
         //Todo: check for min 2 players and have a countdown (~ 10 seconds)
         //if game is already running -> spectator mode
