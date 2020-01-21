@@ -11,3 +11,4 @@ jobs:
       - uses: rymndhng/release-on-push-action@master
         with:
           strategy: patch
+          bump_version_scheme: patch
