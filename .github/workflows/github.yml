@@ -5,7 +5,7 @@ on:
     branches:
       - master
     tags-ignore:
-     - v*
+     - '*.*'
 
 jobs:
   release-on-push:
