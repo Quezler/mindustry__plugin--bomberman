@@ -79,7 +79,7 @@ public class BombermanMod extends Plugin{
                     p.applyEffect(StatusEffects.tarred, 60f);
                     p.damage(2.5f);
                     if (p.dead){
-                        p.setTeam(deathTeam);
+                        p.setTeam(dead);
                         Call.sendMessage(p.name + "[sky] DIED");
                         //TODO: call function to check if there is only one player standing
                     }
