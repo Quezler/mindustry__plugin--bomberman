@@ -6,7 +6,7 @@ jobs:
   release-on-push:
     runs-on: ubuntu-latest
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.UNLIMITED_RICE_PUDDING }}
     steps:
       - uses: rymndhng/release-on-push-action@master
         with:
