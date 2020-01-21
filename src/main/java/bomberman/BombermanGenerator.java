@@ -14,7 +14,7 @@ import static mindustry.Vars.world;
 public class BombermanGenerator extends Generator{
     public final int[][] spawns = {{4, 4}};
 
-    public static final Pallete pallete = Pallete.sandy;
+    public static final Pallete pallete = Structs.random(Pallete.values());
 
     BombermanGenerator(){
         super(size, size);
