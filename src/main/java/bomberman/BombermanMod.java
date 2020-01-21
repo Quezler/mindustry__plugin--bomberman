@@ -1,20 +1,14 @@
 package bomberman;
 
 import arc.*;
-import arc.math.*;
 import arc.util.*;
-import mindustry.entities.*;
-import mindustry.entities.effect.*;
 import mindustry.gen.*;
-import mindustry.type.*;
 import mindustry.game.*;
-import mindustry.world.*;
 import mindustry.plugin.*;
 import mindustry.content.*;
 import mindustry.game.EventType.*;
 import mindustry.core.GameState.*;
 import mindustry.entities.type.Player;
-import mindustry.world.blocks.BuildBlock.*;
 
 import static bomberman.Bomberman.*;
 import static mindustry.Vars.*;
