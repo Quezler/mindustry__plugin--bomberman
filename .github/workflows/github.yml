@@ -1,6 +1,9 @@
 name: github
 
-on: push
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   release-on-push:
