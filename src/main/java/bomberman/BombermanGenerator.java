@@ -27,6 +27,7 @@ public class BombermanGenerator extends Generator{
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
                 tiles[x][y] = new Tile(x, y);
+                tiles[x][y].setFloor(pallete.floor);
             }
         }
 
