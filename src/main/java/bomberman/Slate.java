@@ -71,5 +71,21 @@ public class Slate{
             this.block = block;
             this.center = center;
         }
+
+        public boolean powerup(){
+            if(this == copper)     return true;
+            if(this == titanium)   return true;
+            if(this == plastanium) return true;
+            if(this == surge)      return true;
+
+            return false;
+        }
+
+        public boolean flyable(){
+            if(this == wall)  return false;
+            if(this == scrap) return false;
+
+            return true;
+        }
     }
 }

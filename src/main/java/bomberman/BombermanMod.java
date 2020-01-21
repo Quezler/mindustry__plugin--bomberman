@@ -10,8 +10,11 @@ import mindustry.plugin.*;
 import mindustry.content.*;
 import mindustry.game.EventType.*;
 import mindustry.core.GameState.*;
+import mindustry.world.blocks.*;
+import mindustry.world.blocks.BuildBlock.*;
 
 import static bomberman.Bomberman.*;
+import static bomberman.BombermanGenerator.pallete;
 import static mindustry.Vars.*;
 import static arc.util.Log.info;
 
@@ -58,7 +61,7 @@ public class BombermanMod extends Plugin{
                 Slate tmp = slate(tile(p));
 
                 // player is on the same tile as a powerup
-                if(tmp.state == Slate.State.copper || tmp.state == Slate.State.titanium || tmp.state == Slate.State.plastanium || tmp.state == Slate.State.surge){
+                if(tmp.state.powerup()){
 
                     Powerup tmp2 = Powerup.wall( tmp.center().block() );
                     if(tmp2 == null) return;
@@ -69,13 +72,19 @@ public class BombermanMod extends Plugin{
                     tmp.state = Slate.State.empty;
                 }
 
-                if(tmp.state == Slate.State.wall || tmp.state == Slate.State.scrap){
-//                    Log.info("wall");
-//                    p.velocity().y = 10f;
-//                    Bullet.create(Bullets.waterShot, p, tmp.center().drawx(), tmp.center().drawy(), 90f);
+                if(!tmp.state.flyable()){
                     p.applyEffect(StatusEffects.freezing, 60f);
-                    p.damage(1f);
+                    p.applyEffect(StatusEffects.tarred, 60f);
+                    p.damage(2.5f);
                 }
+            }
+        });
+
+        Events.on(BlockBuildEndEvent.class, event -> {
+            if(!event.breaking) return;
+
+            if(event.tile.block() instanceof BuildBlock && ((BuildEntity)event.tile.ent()).previous == pallete.blockade) {
+                slate(event.tile).state = Slate.State.empty;
             }
         });
 
