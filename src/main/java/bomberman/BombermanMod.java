@@ -1,7 +1,10 @@
 package bomberman;
 
 import arc.*;
+import arc.math.*;
 import arc.util.*;
+import mindustry.entities.*;
+import mindustry.entities.effect.*;
 import mindustry.gen.*;
 import mindustry.type.*;
 import mindustry.game.*;
@@ -56,6 +59,23 @@ public class BombermanMod extends Plugin{
 //                    p.setTeam(Team.green);
 //                    Call.onPlayerDeath(p);
                 }
+
+                Slate tmp = slate(tile(p));
+
+                // touches a powerup (instead of deconstructing)
+                if(tmp.state == Slate.State.copper || tmp.state == Slate.State.titanium || tmp.state == Slate.State.plastanium || tmp.state == Slate.State.surge){
+//                    Lightning.create(Team.derelict, tmp.state.block.color, 0, tmp.center(world.getTiles()).drawx(), tmp.center(world.getTiles()).drawy(), Mathf.random(260), 2);
+//                    Call.onDeconstructFinish(tmp.center(world.getTiles()), tmp.state.block, -1);
+
+                    Powerup tmp2 = Powerup.wall( tmp.center(world.getTiles()).block() );
+                    if(tmp2 == null) return;
+
+                    p.mech = tmp2.mech;
+                    p.heal();
+
+                    Call.onConstructFinish(tmp.center(world.getTiles()), Blocks.air, -1, (byte)0, Team.derelict, true);
+                    tmp.state = Slate.State.empty;
+                }
             }
         });
 
@@ -68,20 +88,6 @@ public class BombermanMod extends Plugin{
                 if(tmp == null) return;
                 Timer.schedule(() -> Call.transferItemTo(Items.thorium, tmp.thorium, event.player.x, event.player.y, event.tile), 0.5f);
             }
-        });
-
-        // deconstruct wall
-        Events.on(BlockBuildEndEvent.class, event -> {
-            if(!event.breaking) return;
-
-            Powerup tmp = Powerup.wall( ((BuildEntity)event.tile.ent()).previous );
-            if(tmp == null) return;
-
-            // mark tile empty
-            slate(event.tile).state = Slate.State.empty;
-
-            event.player.mech = tmp.mech;
-            event.player.heal();
         });
 
 //        //destroys the walls
