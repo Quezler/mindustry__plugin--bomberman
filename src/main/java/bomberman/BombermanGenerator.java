@@ -67,7 +67,8 @@ public class BombermanGenerator extends Generator{
             if(slate.x < 2) slate.state = State.empty;
             if(slate.y < 2) slate.state = State.empty;
             if(slate.x > slates[0].length - 3) slate.state = State.empty;
-            if(slate.y > slates.length - 3) slate.state = State.empty;
+            if(slate.y > slates   .length - 3) slate.state = State.empty;
+
             //fill up the blank spots
             if(slate.x < 3 ^ slate.y < 3 ^ slate.x > slates[0].length - 4 ^ slate.y > slates.length - 4) slate.state = State.scrap;
 
