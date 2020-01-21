@@ -14,6 +14,7 @@ public class Bomberman{
     public final static int size = (grid * 3);
     public final static String mapname = "[royal]Bomberman [white]\uF831";
     public static Slate[][] slates = new Slate[grid][grid];
+    public final static Team[] teams = new Team[]{Team.crux, Team.green, Team.purple, Team.blue};
 
     public static ObjectIntMap<Team> bombs = new ObjectIntMap<>();
 

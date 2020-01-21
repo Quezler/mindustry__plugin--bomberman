@@ -36,7 +36,7 @@ public class BombermanMod extends Plugin{
             if(!active()) return;
 
             event.player.kill();
-            event.player.setTeam(Team.sharded);
+            event.player.setTeam(Structs.random(teams));
             event.player.dead = false;
 
             //set location
@@ -51,7 +51,7 @@ public class BombermanMod extends Plugin{
         //block flying over walls
         Events.on(Trigger.update, () -> {
             for (Player p: playerGroup){
-                if (p.getTeam() != Team.sharded) continue;
+                if (!Structs.contains(teams, p.getTeam())) continue;
                 if (world.tile(p.tileX(), p.tileY()) != null && world.tile(p.tileX(), p.tileY()).block() != Blocks.air){
 //                    Call.sendMessage("[scarlet]FLYING OVER WALLS == CHEATING\ndisqualified!");
 //                    p.setTeam(Team.green);
