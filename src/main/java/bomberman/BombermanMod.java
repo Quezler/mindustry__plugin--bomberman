@@ -2,7 +2,6 @@ package bomberman;
 
 import arc.*;
 import arc.util.*;
-import mindustry.entities.*;
 import mindustry.entities.type.*;
 import mindustry.gen.*;
 import mindustry.game.*;
