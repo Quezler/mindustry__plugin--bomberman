@@ -2,15 +2,14 @@ package bomberman;
 
 import arc.*;
 import arc.util.*;
-import mindustry.entities.*;
-import mindustry.entities.type.*;
 import mindustry.gen.*;
 import mindustry.game.*;
 import mindustry.plugin.*;
 import mindustry.content.*;
+import mindustry.world.blocks.*;
+import mindustry.entities.type.*;
 import mindustry.game.EventType.*;
 import mindustry.core.GameState.*;
-import mindustry.world.blocks.*;
 import mindustry.world.blocks.BuildBlock.*;
 
 import static bomberman.Bomberman.*;
@@ -172,7 +171,7 @@ public class BombermanMod extends Plugin{
 //            //TODO: restart condition
 //        });
 
-        //what does this do
+        //what does this do - dunno, it was there in hexedmod.
         netServer.assigner = (player, players) -> Team.sharded;
     }
 
