@@ -45,8 +45,8 @@ public class Slate{
 
     // places either 1 big or 9 small ones
     public void place(){
-        if(state.center) center().setBlock(state.block);
-        if(!state.center) compass(tile -> tile.setBlock(state.block));
+        if(state.single) center().setBlock(state.block);
+        if(!state.single) compass(tile -> tile.setBlock(state.block));
     }
 
     enum State{
@@ -65,11 +65,11 @@ public class Slate{
         surge     (Blocks.surgeWall, true);
 
         public Block block;
-        public boolean center;
+        public boolean single;
 
-        State(Block block, boolean center){
+        State(Block block, boolean single){
             this.block = block;
-            this.center = center;
+            this.single = single;
         }
 
         public boolean powerup(){
