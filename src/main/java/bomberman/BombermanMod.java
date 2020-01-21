@@ -2,13 +2,14 @@ package bomberman;
 
 import arc.*;
 import arc.util.*;
+import mindustry.entities.*;
+import mindustry.entities.type.*;
 import mindustry.gen.*;
 import mindustry.game.*;
 import mindustry.plugin.*;
 import mindustry.content.*;
 import mindustry.game.EventType.*;
 import mindustry.core.GameState.*;
-import mindustry.entities.type.Player;
 
 import static bomberman.Bomberman.*;
 import static mindustry.Vars.*;
@@ -66,6 +67,14 @@ public class BombermanMod extends Plugin{
 
                     Call.onConstructFinish(tmp.center(), Blocks.air, -1, (byte)0, Team.derelict, true);
                     tmp.state = Slate.State.empty;
+                }
+
+                if(tmp.state == Slate.State.wall || tmp.state == Slate.State.scrap){
+//                    Log.info("wall");
+//                    p.velocity().y = 10f;
+//                    Bullet.create(Bullets.waterShot, p, tmp.center().drawx(), tmp.center().drawy(), 90f);
+                    p.applyEffect(StatusEffects.freezing, 60f);
+                    p.damage(1f);
                 }
             }
         });
