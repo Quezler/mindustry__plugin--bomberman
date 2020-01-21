@@ -2,8 +2,8 @@ package bomberman;
 
 import arc.func.*;
 import arc.math.*;
-import mindustry.entities.type.*;
 import mindustry.world.*;
+import mindustry.entities.type.*;
 
 import static mindustry.Vars.world;
 
