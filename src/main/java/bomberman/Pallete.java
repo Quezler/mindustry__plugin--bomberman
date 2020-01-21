@@ -1,7 +1,7 @@
 package bomberman;
 
-import mindustry.content.*;
 import mindustry.world.*;
+import mindustry.content.*;
 import mindustry.world.blocks.*;
 
 public enum Pallete{
