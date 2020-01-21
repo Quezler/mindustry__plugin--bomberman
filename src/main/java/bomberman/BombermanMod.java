@@ -13,6 +13,7 @@ import mindustry.core.GameState.*;
 import mindustry.entities.type.Player;
 import mindustry.world.blocks.BuildBlock.*;
 
+import static bomberman.Bomberman.*;
 import static mindustry.Vars.*;
 import static arc.util.Log.info;
 
@@ -77,7 +78,7 @@ public class BombermanMod extends Plugin{
             if(tmp == null) return;
 
             // mark tile empty
-            tileToSlate(event.tile).state = Slate.State.empty;
+            slate(event.tile).state = Slate.State.empty;
 
             event.player.mech = tmp.mech;
             event.player.heal();
@@ -160,14 +161,6 @@ public class BombermanMod extends Plugin{
         netServer.assigner = (player, players) -> Team.sharded;
     }
 
-    public Tile playerToTile(Player player){
-        return world.tile(world.toTile(player.x), world.toTile(player.y));
-    }
-
-    public Slate tileToSlate(Tile tile){
-        return Slate.tile(generator.slates, tile);
-    }
-
     @Override
     public void registerServerCommands(CommandHandler handler){
         handler.register("bomberman", "Begin hosting with the Bomberman gamemode.", args -> {
@@ -183,39 +176,5 @@ public class BombermanMod extends Plugin{
 
     public boolean active(){
         return state.rules.tags.getBool("bomberman") && !state.is(State.menu);
-    }
-
-    enum Powerup{
-        copper    (Mechs.alpha, Slate.State.copper    ,  7),
-        titanium  (Mechs.delta, Slate.State.titanium  , 14),
-        plastanium(Mechs.tau  , Slate.State.plastanium, 12),
-        surge     (Mechs.omega, Slate.State.surge     , 20);
-
-
-        public final Mech mech;
-        public final Slate.State block; // todo: rename/refractor to slate
-        public final int thorium;
-
-        Powerup(Mech mech, Slate.State block, int thorium){
-            this.mech = mech;
-            this.block = block;
-            this.thorium = thorium;
-        }
-
-        public static Powerup wall(Block block){
-            for(Powerup powerup : values()){
-                if(powerup.block.block == block) return powerup;
-            }
-
-            return null;
-        }
-
-        public static Powerup player(Player player){
-            for(Powerup powerup : values()){
-                if(powerup.mech == player.mech) return powerup;
-            }
-
-            return null;
-        }
     }
 }

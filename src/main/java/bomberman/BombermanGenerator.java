@@ -1,28 +1,20 @@
 package bomberman;
 
-import arc.func.*;
 import arc.math.*;
 import arc.util.*;
 import arc.struct.*;
 import mindustry.maps.*;
 import bomberman.Slate.*;
 import mindustry.world.*;
-import mindustry.content.*;
-import bomberman.BombermanMod.*;
-import mindustry.world.blocks.*;
 import mindustry.maps.generators.*;
 
+import static bomberman.Bomberman.*;
 import static mindustry.Vars.world;
 
 public class BombermanGenerator extends Generator{
-    public final static int grid = 15; // odd
-    public final static int size = (grid * 3);
-
     public final int[][] spawns = {{4, 4}};
 
     public static final Pallete pallete = Pallete.sandy;
-
-    public Slate[][] slates = new Slate[grid][grid];
 
     BombermanGenerator(){
         super(size, size);
@@ -87,36 +79,12 @@ public class BombermanGenerator extends Generator{
             if(slate.state != State.scrap) return;
             if(!Mathf.chance(0.025)) return;
 
-            slate.state = Structs.random(Powerup.values()).block;
+            slate.state = Structs.random(Powerup.values()).slate;
         });
 
-        // draw slates (write)
+        // draw slates (place)
         slates(slate -> slate.draw(tiles));
 
         world.setMap(new Map(StringMap.of("name", "Bomberman")));
-    }
-
-    public void slates(Cons<Slate> cons){
-        for(int x = 0; x < slates.length; x++){
-            for(int y = 0; y < slates[0].length; y++){
-                cons.get(slates[x][y]);
-            }
-        }
-    }
-
-    enum Pallete{
-        sandy(Blocks.darksand, Blocks.duneRocks, Blocks.scrapWallHuge, Blocks.liquidVoid);
-
-        public final Floor floor;
-        public final StaticWall wall;
-        public final Block blockade; // 3x3
-        public final Block fallback;
-
-        Pallete(Block floor, Block wall, Block blockade, Block fallback){
-            this.floor = (Floor)floor;
-            this.wall = (StaticWall)wall;
-            this.blockade = blockade;
-            this.fallback = fallback;
-        }
     }
 }

@@ -1,38 +1,37 @@
 package bomberman;
 
 import arc.func.*;
-import arc.math.*;
 import mindustry.world.*;
 import mindustry.content.*;
 
 import static bomberman.BombermanGenerator.pallete;
 
 public class Slate{
-    public short x;
-    public short y;
-    public State state = State.undefined;
+    short x;
+    short y;
+    State state = State.undefined;
 
-    public Slate(int x, int y) {
+    Slate(int x, int y) {
         this.x = (short)x;
         this.y = (short)y;
     }
 
+    // center x
     public int worldx(){
         return x * 3 + 1;
     }
 
+    // center y
     public int worldy(){
         return y * 3 + 1;
     }
 
-    public static Slate tile(Slate[][] slates, Tile tile){
-        return slates[Mathf.floor(tile.x / 3)][Mathf.floor(tile.y / 3)];
-    }
-
+    // center tile
     public Tile center(Tile[][] tiles){
         return tiles[worldx()][worldy()];
     }
 
+    // all 9 tiles in this slate
     public void compass(Tile[][] tiles, Cons<Tile> cons){
         int offsetx = -(3 - 1) / 2;
         int offsety = -(3 - 1) / 2;
@@ -43,33 +42,33 @@ public class Slate{
         }
     }
 
+    // set the block based on state
     public void draw(Tile[][] tiles){
-        if(state.size == 1) center(tiles).setBlock(state.block);
-        if(state.size == 3) compass(tiles, tile -> tile.setBlock(state.block));
+        if(state.center) center(tiles).setBlock(state.block);
+        if(!state.center) compass(tiles, tile -> tile.setBlock(state.block));
     }
 
     enum State{
         // default
-        undefined(pallete.fallback, 1),
+        undefined(pallete.fallback, true),
 
         // board
-        wall(pallete.wall, 3),
-        scrap(pallete.blockade, 1),
-        empty(Blocks.air, 1),
+        wall (pallete.wall, false),
+        scrap(pallete.blockade, true),
+        empty(Blocks.air, true),
 
         // powerups
-        copper    (Blocks.copperWall, 1),
-        titanium  (Blocks.titaniumWall, 1),
-        plastanium(Blocks.plastaniumWall, 1),
-        surge     (Blocks.surgeWall, 1);
-
+        copper    (Blocks.copperWall, true),
+        titanium  (Blocks.titaniumWall, true),
+        plastanium(Blocks.plastaniumWall, true),
+        surge     (Blocks.surgeWall, true);
 
         public Block block;
-        private int size;
+        public boolean center;
 
-        State(Block block, int size){
+        State(Block block, boolean center){
             this.block = block;
-            this.size = size;
+            this.center = center;
         }
     }
 }
