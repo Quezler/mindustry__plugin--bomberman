@@ -2,7 +2,9 @@ package bomberman;
 
 import arc.func.*;
 import arc.math.*;
+import arc.struct.*;
 import mindustry.entities.type.*;
+import mindustry.game.*;
 import mindustry.world.*;
 
 import static mindustry.Vars.world;
@@ -12,6 +14,8 @@ public class Bomberman{
     public final static int size = (grid * 3);
     public final static String mapname = "[royal]Bomberman [white]\uF831";
     public static Slate[][] slates = new Slate[grid][grid];
+
+    public static ObjectIntMap<Team> bombs = new ObjectIntMap<>();
 
     // resolve tile from player
     public static Tile tile(Player player){

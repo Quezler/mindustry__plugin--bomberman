@@ -61,6 +61,7 @@ public class Slate{
         // board
         wall (pallete.wall, false),
         scrap(pallete.blockade, true),
+        bomb(Blocks.thoriumReactor, true),
         empty(Blocks.air, true),
 
         // powerups

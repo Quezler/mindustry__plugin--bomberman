@@ -77,6 +77,22 @@ public class BombermanMod extends Plugin{
                     p.applyEffect(StatusEffects.tarred, 60f);
                     p.damage(2.5f);
                 }
+
+                if(p.isBoosting){
+                    Slate over = slate(tile(p));
+
+                    if(bombs.get(p.getTeam(), 0) >= 2) return; // 2 bombs per team max
+
+                    if(over.state == Slate.State.empty){
+                        over.state = Slate.State.bomb;
+                        Call.onConstructFinish(over.center(), Blocks.thoriumReactor, p.id, (byte)0, p.getTeam(), true);
+
+                        Powerup tmp3 = Powerup.player(p);
+                        if(tmp3 != null) Timer.schedule(() -> Call.transferItemTo(Items.thorium, tmp3.thorium, p.x, p.y, over.center()), 0.25f);
+
+                        bombs.getAndIncrement(p.getTeam(), 0, 1);
+                    }
+                }
             }
         });
 
@@ -88,20 +104,10 @@ public class BombermanMod extends Plugin{
             }
         });
 
-        // construct reactor
-        Events.on(BlockBuildEndEvent.class, event -> {
-            if(event.breaking) return;
-
-            if(event.tile.block() == Blocks.thoriumReactor) {
-                Powerup tmp = Powerup.player(event.player);
-                if(tmp == null) return;
-                Timer.schedule(() -> Call.transferItemTo(Items.thorium, tmp.thorium, event.player.x, event.player.y, event.tile), 0.5f);
-            }
-        });
-
         Events.on(BlockDestroyEvent.class, event -> {
             if(event.tile.block() != Blocks.thoriumReactor) return;
 
+            bombs.getAndIncrement(event.tile.getTeam(), 0, -1);
             Slate reactor = slate(event.tile);
             reactor.compass(Fire::create);
 
