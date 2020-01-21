@@ -1,11 +1,12 @@
 package bomberman;
 
 import arc.func.*;
-import mindustry.world.*;
 import mindustry.content.*;
+import mindustry.world.*;
 
-import static bomberman.BombermanGenerator.*;
-import static bomberman.Bomberman.*;
+import static bomberman.Bomberman.slates;
+import static bomberman.BombermanGenerator.pallete;
+
 import static mindustry.Vars.world;
 
 public class Slate{
@@ -52,6 +53,10 @@ public class Slate{
         if(!state.single) compass(tile -> tile.setBlock(state.block, blockteam));
     }
 
+    public Slate adjecent(Direction direction){
+        return slates[x + direction.x][y + direction.y];
+    }
+
     enum State{
         // default
         undefined(pallete.fallback, true),
@@ -59,6 +64,7 @@ public class Slate{
         // board
         wall (pallete.wall, false),
         scrap(pallete.blockade, true),
+        bomb(Blocks.thoriumReactor, true),
         empty(Blocks.air, true),
 
         // powerups

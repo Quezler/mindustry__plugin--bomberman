@@ -1,9 +1,9 @@
 package bomberman;
 
-import mindustry.type.*;
-import mindustry.world.*;
 import mindustry.content.*;
 import mindustry.entities.type.*;
+import mindustry.type.*;
+import mindustry.world.*;
 
 
 

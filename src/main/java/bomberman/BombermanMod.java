@@ -2,20 +2,21 @@ package bomberman;
 
 import arc.*;
 import arc.util.*;
-import mindustry.gen.*;
-import mindustry.game.*;
-import mindustry.plugin.*;
 import mindustry.content.*;
-import mindustry.world.blocks.*;
+import mindustry.core.GameState.*;
+import mindustry.entities.effect.*;
 import mindustry.entities.type.*;
 import mindustry.game.EventType.*;
-import mindustry.core.GameState.*;
+import mindustry.game.*;
+import mindustry.gen.*;
+import mindustry.plugin.*;
+import mindustry.world.blocks.*;
 import mindustry.world.blocks.BuildBlock.*;
 
+import static arc.util.Log.info;
 import static bomberman.Bomberman.*;
 import static bomberman.BombermanGenerator.pallete;
 import static mindustry.Vars.*;
-import static arc.util.Log.info;
 
 public class BombermanMod extends Plugin{
     private final Rules rules = new Rules();
@@ -37,7 +38,7 @@ public class BombermanMod extends Plugin{
             if(!active()) return;
 
             event.player.kill();
-            event.player.setTeam(Team.sharded);
+            event.player.setTeam(Structs.random(teams));
             event.player.dead = false;
 
             //set location
@@ -52,7 +53,7 @@ public class BombermanMod extends Plugin{
         //block flying over walls
         Events.on(Trigger.update, () -> {
             for (Player p: playerGroup){
-                if (p.getTeam() != Team.sharded) continue;
+                if (!Structs.contains(teams, p.getTeam())) continue;
                 if (world.tile(p.tileX(), p.tileY()) != null && world.tile(p.tileX(), p.tileY()).block() != Blocks.air){
 //                    Call.sendMessage("[scarlet]FLYING OVER WALLS == CHEATING\ndisqualified!");
 //                    p.setTeam(Team.green);
@@ -83,6 +84,22 @@ public class BombermanMod extends Plugin{
                         //TODO: call function to check if there is only one player standing
                     }
                 }
+
+                if(p.isBoosting){
+                    Slate over = slate(tile(p));
+
+                    if(bombs.get(p.getTeam(), 0) >= 2) return; // 2 bombs per team max
+
+                    if(over.state == Slate.State.empty){
+                        over.state = Slate.State.bomb;
+                        Call.onConstructFinish(over.center(), Blocks.thoriumReactor, p.id, (byte)0, p.getTeam(), true);
+
+                        Powerup tmp3 = Powerup.player(p);
+                        if(tmp3 != null) Timer.schedule(() -> Call.transferItemTo(Items.thorium, tmp3.thorium, p.x, p.y, over.center()), 0.25f);
+
+                        bombs.getAndIncrement(p.getTeam(), 0, 1);
+                    }
+                }
             }
         });
 
@@ -94,14 +111,30 @@ public class BombermanMod extends Plugin{
             }
         });
 
-        // construct reactor
-        Events.on(BlockBuildEndEvent.class, event -> {
-            if(event.breaking) return;
+        Events.on(BlockDestroyEvent.class, event -> {
+            slate(event.tile).state = Slate.State.empty;
+            if(event.tile.block() != Blocks.thoriumReactor) return;
 
-            if(event.tile.block() == Blocks.thoriumReactor) {
-                Powerup tmp = Powerup.player(event.player);
-                if(tmp == null) return;
-                Timer.schedule(() -> Call.transferItemTo(Items.thorium, tmp.thorium, event.player.x, event.player.y, event.tile), 0.5f);
+            bombs.getAndIncrement(event.tile.getTeam(), 0, -1);
+            Slate reactor = slate(event.tile);
+            reactor.compass(Fire::create);
+
+            Slate tmp;
+            for(Direction direction : Direction.values()){
+                tmp = reactor.adjecent(direction);
+                do{
+                    if (tmp.state == Slate.State.wall) break;
+                    if (tmp.state == Slate.State.empty || tmp.state.powerup()) tmp.compass(Fire::create);
+
+                    if (tmp.state == Slate.State.scrap){
+                        omeowamoushindeiru(tmp);
+                        tmp.compass(Fire::create);
+                        tmp.state = Slate.State.empty;
+                        break;
+                    }
+
+                    tmp = tmp.adjecent(direction);
+                }while(true);
             }
         });
 
@@ -180,6 +213,13 @@ public class BombermanMod extends Plugin{
 
         //what does this do - dunno, it was there in hexedmod.
         netServer.assigner = (player, players) -> Team.sharded;
+    }
+
+    private void omeowamoushindeiru(Slate slate){
+        Core.app.post(() -> {
+            slate.center().entity.onDeath();
+            slate.center().removeNet();
+        });
     }
 
     @Override

@@ -1,12 +1,12 @@
 package bomberman;
 
 import arc.math.*;
-import arc.util.*;
 import arc.struct.*;
-import mindustry.maps.*;
+import arc.util.*;
 import bomberman.Slate.*;
-import mindustry.world.*;
+import mindustry.maps.*;
 import mindustry.maps.generators.*;
+import mindustry.world.*;
 
 import static bomberman.Bomberman.*;
 import static mindustry.Vars.world;
@@ -15,7 +15,7 @@ import static mindustry.Vars.world;
 public class BombermanGenerator extends Generator{
     public final int[][] spawns = {{4, 4}};
 
-    public static final Pallete pallete = Pallete.sandy;
+    public static final Pallete pallete = Structs.random(Pallete.values());
 
     BombermanGenerator(){
         super(size, size);
@@ -28,6 +28,7 @@ public class BombermanGenerator extends Generator{
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
                 tiles[x][y] = new Tile(x, y);
+                tiles[x][y].setFloor(pallete.floor);
             }
         }
 
