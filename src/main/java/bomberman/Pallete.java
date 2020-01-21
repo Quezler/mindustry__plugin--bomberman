@@ -12,7 +12,7 @@ public enum Pallete{
     chanel(Blocks.water,      Blocks.darkMetal,  Blocks.liquidTank),
     fields(Blocks.grass,      Blocks.shrubs,     Blocks.launchPad),
     snowey(Blocks.snow,       Blocks.snowrocks,  Blocks.thermalPump),
-    power(Blocks.metalFloor5, Blocks.sandRocks,   Blocks.batteryLarge);
+    powerd(Blocks.metalFloor5, Blocks.sandRocks,   Blocks.batteryLarge);
 
     public final Floor floor;
     public final StaticWall wall;
