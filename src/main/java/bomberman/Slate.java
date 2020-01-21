@@ -48,7 +48,7 @@ public class Slate{
 
     // places either 1 big or 9 small ones
     public void place(){
-        if(state.single) center().setBlock(state.block, blockteam);
+        if(state.single) center().setBlock(state.block, (state.block == Blocks.air) ? aliveTeam : blockteam);
         if(!state.single) compass(tile -> tile.setBlock(state.block, blockteam));
     }
 
