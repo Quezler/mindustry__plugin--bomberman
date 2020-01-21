@@ -5,6 +5,8 @@ import mindustry.world.*;
 import mindustry.content.*;
 import mindustry.entities.type.*;
 
+
+
 public enum Powerup{
     copper    (Mechs.alpha, Slate.State.copper    ,  7),
     titanium  (Mechs.delta, Slate.State.titanium  , 14),

@@ -4,13 +4,16 @@ import arc.func.*;
 import mindustry.world.*;
 import mindustry.content.*;
 
-import static bomberman.BombermanGenerator.pallete;
+import static bomberman.BombermanGenerator.*;
+import static bomberman.Bomberman.*;
 import static mindustry.Vars.world;
 
 public class Slate{
     short x;
     short y;
     State state = State.undefined;
+    //import fix
+    //private static Pallete pallete = Pallete.sandy;
 
     Slate(int x, int y) {
         this.x = (short)x;
@@ -45,8 +48,8 @@ public class Slate{
 
     // places either 1 big or 9 small ones
     public void place(){
-        if(state.single) center().setBlock(state.block);
-        if(!state.single) compass(tile -> tile.setBlock(state.block));
+        if(state.single) center().setBlock(state.block, blockteam);
+        if(!state.single) compass(tile -> tile.setBlock(state.block, blockteam));
     }
 
     enum State{
