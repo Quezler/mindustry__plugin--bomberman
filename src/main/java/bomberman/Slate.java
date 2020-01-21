@@ -21,6 +21,12 @@ public class Slate{
         this.y = (short)y;
     }
 
+    // setter
+    public void setSlate(int x, int y){
+        this.x = (short)x;
+        this.y = (short)y;
+    }
+
     // center x
     public int worldx(){
         return x * 3 + 1;

@@ -13,7 +13,7 @@ import static mindustry.Vars.world;
 
 // class that generates the map
 public class BombermanGenerator extends Generator{
-    public final int[][] spawns = {{4, 4}};
+    public final int[][] spawns = getSpawns();//{{4, 4}};
 
     public static final Pallete pallete = Structs.random(Pallete.values());
 
@@ -88,5 +88,20 @@ public class BombermanGenerator extends Generator{
         slates(Slate::place);
 
         world.setMap(new Map(StringMap.of("name", mapname)));
+    }
+
+    public int[][] getSpawns(){
+        int [][] ret = new int[4][2];
+        Slate tmp = new Slate(0,0);
+        int counter = 0;
+        for (int x = 1; x < slates[0].length; x += slates[0].length - 3){
+            for (int y = 1; y < slates.length; y += slates.length - 3){
+                tmp.setSlate(x, y);
+                ret[counter][0] = tmp.worldx();
+                ret[counter][1] = tmp.worldy();
+                counter++;
+            }
+        }
+        return ret;
     }
 }

@@ -31,7 +31,6 @@ public class BombermanMod extends Plugin{
         rules.canGameOver = false;
         // block all blocks except thoriumreactor
 
-
         //Todo: check for min 2 players and have a countdown (~ 10 seconds)
         //if game is already running -> spectator mode
         Events.on(PlayerJoin.class, event -> {
@@ -48,6 +47,7 @@ public class BombermanMod extends Plugin{
 
             event.player.mech = Powerup.copper.mech;
             event.player.heal();
+
         });
 
         //block flying over walls
@@ -110,6 +110,7 @@ public class BombermanMod extends Plugin{
                 slate(event.tile).state = Slate.State.empty;
             }
         });
+
 
         Events.on(BlockDestroyEvent.class, event -> {
             slate(event.tile).state = Slate.State.empty;
