@@ -4,6 +4,7 @@ import arc.func.*;
 import mindustry.world.*;
 import mindustry.content.*;
 
+import static bomberman.Bomberman.slates;
 import static bomberman.BombermanGenerator.pallete;
 import static mindustry.Vars.world;
 
@@ -47,6 +48,10 @@ public class Slate{
     public void place(){
         if(state.single) center().setBlock(state.block);
         if(!state.single) compass(tile -> tile.setBlock(state.block));
+    }
+
+    public Slate adjecent(Direction direction){
+        return slates[x + direction.x][y + direction.y];
     }
 
     enum State{

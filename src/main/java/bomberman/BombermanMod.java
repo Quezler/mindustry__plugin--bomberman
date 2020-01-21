@@ -2,6 +2,7 @@ package bomberman;
 
 import arc.*;
 import arc.util.*;
+import mindustry.entities.effect.*;
 import mindustry.gen.*;
 import mindustry.game.*;
 import mindustry.plugin.*;
@@ -95,6 +96,31 @@ public class BombermanMod extends Plugin{
                 Powerup tmp = Powerup.player(event.player);
                 if(tmp == null) return;
                 Timer.schedule(() -> Call.transferItemTo(Items.thorium, tmp.thorium, event.player.x, event.player.y, event.tile), 0.5f);
+            }
+        });
+
+        Events.on(BlockDestroyEvent.class, event -> {
+            if(event.tile.block() != Blocks.thoriumReactor) return;
+
+            Slate reactor = slate(event.tile);
+            reactor.compass(Fire::create);
+
+            Slate tmp;
+            for(Direction direction : Direction.values()){
+                tmp = reactor.adjecent(direction);
+                do{
+                    if (tmp.state == Slate.State.wall) break;
+                    if (tmp.state == Slate.State.empty) tmp.compass(Fire::create);
+
+                    if (tmp.state == Slate.State.scrap){
+                        tmp.center().removeNet();
+                        tmp.compass(Fire::create);
+                        tmp.state = Slate.State.empty;
+                        break;
+                    }
+
+                    tmp = tmp.adjecent(direction);
+                }while(true);
             }
         });
 
