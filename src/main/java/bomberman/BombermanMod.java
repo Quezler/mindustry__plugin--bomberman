@@ -110,6 +110,7 @@ public class BombermanMod extends Plugin{
             bombs.getAndIncrement(event.tile.getTeam(), 0, -1);
             Slate reactor = slate(event.tile);
             reactor.compass(Fire::create);
+            reactor.state = Slate.State.empty;
 
             Slate tmp;
             for(Direction direction : Direction.values()){
