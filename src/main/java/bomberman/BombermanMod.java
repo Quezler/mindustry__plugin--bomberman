@@ -120,7 +120,7 @@ public class BombermanMod extends Plugin{
                     if (tmp.state == Slate.State.empty) tmp.compass(Fire::create);
 
                     if (tmp.state == Slate.State.scrap){
-                        tmp.center().removeNet();
+                        omeowamoushindeiru(tmp);
                         tmp.compass(Fire::create);
                         tmp.state = Slate.State.empty;
                         break;
@@ -206,6 +206,13 @@ public class BombermanMod extends Plugin{
 
         //what does this do - dunno, it was there in hexedmod.
         netServer.assigner = (player, players) -> Team.sharded;
+    }
+
+    private void omeowamoushindeiru(Slate slate){
+        Core.app.post(() -> {
+            slate.center().entity.onDeath();
+            slate.center().removeNet();
+        });
     }
 
     @Override
