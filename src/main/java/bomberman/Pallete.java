@@ -5,14 +5,14 @@ import mindustry.world.*;
 import mindustry.world.blocks.*;
 
 public enum Pallete{
-    cavern(Blocks.darksand,   Blocks.duneRocks,  Blocks.scrapWallHuge),
-    spored(Blocks.shale,      Blocks.sporerocks, Blocks.oilExtractor),
-    desert(Blocks.sand,       Blocks.saltRocks,  Blocks.largeSolarPanel),
-    forged(Blocks.hotrock,    Blocks.cliffs,     Blocks.multiPress),
-    chanel(Blocks.water,      Blocks.darkMetal,  Blocks.liquidTank),
-    fields(Blocks.grass,      Blocks.shrubs,     Blocks.launchPad),
-    snowey(Blocks.snow,       Blocks.snowrocks,  Blocks.thermalPump),
-    powerd(Blocks.metalFloor5, Blocks.sandRocks,   Blocks.batteryLarge);
+    cavern(Blocks.darksand,    Blocks.duneRocks,  Blocks.scrapWallHuge),
+    spored(Blocks.shale,       Blocks.sporerocks, Blocks.oilExtractor),
+    desert(Blocks.sand,        Blocks.saltRocks,  Blocks.largeSolarPanel),
+    forged(Blocks.hotrock,     Blocks.cliffs,     Blocks.multiPress),
+    chanel(Blocks.water,       Blocks.darkMetal,  Blocks.liquidTank),
+    fields(Blocks.grass,       Blocks.shrubs,     Blocks.launchPad),
+    snowey(Blocks.snow,        Blocks.snowrocks,  Blocks.thermalPump),
+    powerd(Blocks.metalFloor5, Blocks.sandRocks,  Blocks.batteryLarge);
 
     public final Floor floor;
     public final StaticWall wall;
