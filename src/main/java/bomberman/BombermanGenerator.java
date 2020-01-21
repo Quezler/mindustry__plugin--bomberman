@@ -1,12 +1,12 @@
 package bomberman;
 
 import arc.math.*;
-import arc.util.*;
 import arc.struct.*;
-import mindustry.maps.*;
+import arc.util.*;
 import bomberman.Slate.*;
-import mindustry.world.*;
+import mindustry.maps.*;
 import mindustry.maps.generators.*;
+import mindustry.world.*;
 
 import static bomberman.Bomberman.*;
 import static mindustry.Vars.world;

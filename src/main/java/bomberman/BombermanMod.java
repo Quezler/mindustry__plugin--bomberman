@@ -2,21 +2,21 @@ package bomberman;
 
 import arc.*;
 import arc.util.*;
-import mindustry.entities.effect.*;
-import mindustry.gen.*;
-import mindustry.game.*;
-import mindustry.plugin.*;
 import mindustry.content.*;
-import mindustry.world.blocks.*;
+import mindustry.core.GameState.*;
+import mindustry.entities.effect.*;
 import mindustry.entities.type.*;
 import mindustry.game.EventType.*;
-import mindustry.core.GameState.*;
+import mindustry.game.*;
+import mindustry.gen.*;
+import mindustry.plugin.*;
+import mindustry.world.blocks.*;
 import mindustry.world.blocks.BuildBlock.*;
 
+import static arc.util.Log.info;
 import static bomberman.Bomberman.*;
 import static bomberman.BombermanGenerator.pallete;
 import static mindustry.Vars.*;
-import static arc.util.Log.info;
 
 public class BombermanMod extends Plugin{
     private final Rules rules = new Rules();

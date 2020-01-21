@@ -1,8 +1,8 @@
 package bomberman;
 
 import arc.func.*;
-import mindustry.world.*;
 import mindustry.content.*;
+import mindustry.world.*;
 
 import static bomberman.Bomberman.slates;
 import static bomberman.BombermanGenerator.pallete;
