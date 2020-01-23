@@ -46,7 +46,6 @@ public class BombermanMod extends Plugin{
 
             event.player.mech = Powerup.copper.mech;
             event.player.heal();
-
         });
 
         //block flying over walls
@@ -57,6 +56,12 @@ public class BombermanMod extends Plugin{
                 if (!Structs.contains(teams, p.getTeam())) continue;
 
                 Slate tmp = slate(tile(p));
+
+                // player is death
+                if(p.dead){
+                    p.setTeam(dead);
+                    Call.sendMessage(p.name + "[sky] died in an [accent]explosion...");
+                }
 
                 // player is on the same tile as a powerup
                 if(tmp.state.powerup()){
@@ -77,7 +82,6 @@ public class BombermanMod extends Plugin{
                     if (p.dead){
                         p.setTeam(dead);
                         Call.sendMessage(p.name + "[sky] DIED[] (too much flying)");
-                        //TODO: call function to check if there is only one player standing
                     }
                 }
 
@@ -97,6 +101,7 @@ public class BombermanMod extends Plugin{
                     }
                 }
             }
+            //TODO: check if there is only one player alive
         });
 
         Events.on(BlockBuildEndEvent.class, event -> {
@@ -107,6 +112,8 @@ public class BombermanMod extends Plugin{
                     slate(event.tile).state = Slate.State.empty;
                 }
             } else {
+                // had problems in the past
+                if(event.tile == null) return;
                 Call.onDeconstructFinish(event.tile, event.tile.block(), event.player.getID());
                 event.player.sendMessage("[scarlet] Don't build blocks!");
 
@@ -116,7 +123,6 @@ public class BombermanMod extends Plugin{
                 if (event.player.dead){
                     event.player.setTeam(dead);
                     Call.sendMessage(event.player.name + "[sky] DIED[] (too much building)");
-                    //TODO: call function to check if there is only one player standing
                 }
             }
         });
