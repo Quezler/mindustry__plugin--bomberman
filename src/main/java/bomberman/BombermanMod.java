@@ -29,7 +29,6 @@ public class BombermanMod extends Plugin{
         rules.tags.put("bomberman", "true");
         rules.infiniteResources = true;
         rules.canGameOver = false;
-        // block all blocks except thoriumreactor
 
         //Todo: check for min 2 players and have a countdown (~ 10 seconds)
         //if game is already running -> spectator mode
@@ -47,20 +46,22 @@ public class BombermanMod extends Plugin{
 
             event.player.mech = Powerup.copper.mech;
             event.player.heal();
-
         });
 
         //block flying over walls
         Events.on(Trigger.update, () -> {
+            if(!active()) return;
+
             for (Player p: playerGroup){
                 if (!Structs.contains(teams, p.getTeam())) continue;
-                if (world.tile(p.tileX(), p.tileY()) != null && world.tile(p.tileX(), p.tileY()).block() != Blocks.air){
-//                    Call.sendMessage("[scarlet]FLYING OVER WALLS == CHEATING\ndisqualified!");
-//                    p.setTeam(Team.green);
-//                    Call.onPlayerDeath(p);
-                }
 
                 Slate tmp = slate(tile(p));
+
+                // player is death
+                if(p.dead){
+                    p.setTeam(dead);
+                    Call.sendMessage(p.name + "[sky] died in an [accent]explosion...");
+                }
 
                 // player is on the same tile as a powerup
                 if(tmp.state.powerup()){
@@ -69,7 +70,7 @@ public class BombermanMod extends Plugin{
                     if(tmp2 == null) return;
                     p.mech = tmp2.mech;
                     p.heal();
-
+                    //remove powerup wall by building an airtile on top :thinking:
                     Call.onConstructFinish(tmp.center(), Blocks.air, -1, (byte)0, Team.derelict, true);
                     tmp.state = Slate.State.empty;
                 }
@@ -80,8 +81,7 @@ public class BombermanMod extends Plugin{
                     p.damage(2.5f);
                     if (p.dead){
                         p.setTeam(dead);
-                        Call.sendMessage(p.name + "[sky] DIED");
-                        //TODO: call function to check if there is only one player standing
+                        Call.sendMessage(p.name + "[sky] DIED[] (too much flying)");
                     }
                 }
 
@@ -101,16 +101,31 @@ public class BombermanMod extends Plugin{
                     }
                 }
             }
+            //TODO: check if there is only one player alive
         });
 
         Events.on(BlockBuildEndEvent.class, event -> {
-            if(!event.breaking) return;
+            if(!active()) return;
 
-            if(event.tile.block() instanceof BuildBlock && (((BuildEntity)event.tile.ent()).previous == pallete.blockade || slate(event.tile).state.powerup()) {
-                slate(event.tile).state = Slate.State.empty;
+            if(event.breaking){
+                if(event.tile.block() instanceof BuildBlock && (((BuildEntity)event.tile.ent()).previous == pallete.blockade || slate(event.tile).state.powerup())) {
+                    slate(event.tile).state = Slate.State.empty;
+                }
+            } else {
+                // had problems in the past
+                if(event.tile == null) return;
+                Call.onDeconstructFinish(event.tile, event.tile.block(), event.player.getID());
+                event.player.sendMessage("[scarlet] Don't build blocks!");
+
+                event.player.applyEffect(StatusEffects.freezing, 180f);
+                event.player.applyEffect(StatusEffects.tarred, 180f);
+                event.player.damage(60f);
+                if (event.player.dead){
+                    event.player.setTeam(dead);
+                    Call.sendMessage(event.player.name + "[sky] DIED[] (too much building)");
+                }
             }
         });
-
 
         Events.on(BlockDestroyEvent.class, event -> {
             slate(event.tile).state = Slate.State.empty;
@@ -139,79 +154,6 @@ public class BombermanMod extends Plugin{
             }
         });
 
-//        //destroys the walls
-//        Events.on(BlockDestroyEvent.class, event -> {
-//            if(event.tile.block() != Blocks.thoriumReactor) return;
-//            int x = event.tile.x;
-//            int y = event.tile.y;
-//            //delete horizontal
-//            boolean hdamage = false;
-//            if (!(world.tile(x-3, y).block() == generator.pallete.wall && world.tile(x+3, y).block() == generator.pallete.wall)){
-//                hdamage = true;
-//                generator.breakable.each(tile -> {
-//                    if(tile.block() != generator.pallete.blockade) return;
-//                    if(event.tile.y == tile.y) {
-//                        /*new method - not in servertestfile
-//                        tile.removeNet();*/
-//                        //alternative
-//                        Time.run(0f, tile.entity::kill);
-//                        //TODO: draw laser on airtiles
-//                        tile.getLinkedTilesAs(Blocks.scrapWallLarge, new Array<>()).each(Fire::create);
-//                    }
-//                });
-//            }
-//            //delete vertical
-//            boolean vdamage = false;
-//            if (!(world.tile(x, y-3).block() == generator.pallete.wall && world.tile(x, y+3).block() == generator.pallete.wall)){
-//                vdamage = true;
-//                generator.breakable.each(tile -> {
-//                    if(tile.block() != generator.pallete.blockade) return;
-//                    if(event.tile.x == tile.x) {
-//                        /*new method - not in servertestfile
-//                        tile.removeNet();*/
-//                        //alternative
-//                        Time.run(0f, tile.entity::kill);
-//                        tile.getLinkedTilesAs(Blocks.scrapWallLarge, new Array<>()).each(Fire::create);
-//                    }
-//                });
-//            }
-//            /*
-//            generator.breakable.each(tile -> {
-//
-//                if(tile.block() != generator.pallete.blockade) return;
-//                if(event.tile.x == tile.x || event.tile.y == tile.y){
-//                    //new method - not in servertestfile
-//                    //tile.removeNet();
-//                    //alternative
-//                    Time.run(0f, tile.entity::kill);
-//                    tile.getLinkedTilesAs(Blocks.scrapWallLarge, new Array<>()).each(Fire::create);
-//                }
-//            });*/
-//            //check if player was in laser/fire
-//            for (Player p: playerGroup){
-//                //already dead
-//                if (p.getTeam() != Team.sharded) continue;
-//                if (vdamage){
-//                    if (x-1 <= p.tileX() && p.tileX() <= x+1){
-//                        //kill player and put on green team
-//                        Call.sendMessage('\n' + p.name + "[sky] DIED");
-//                        p.setTeam(Team.green);
-//                        Call.onPlayerDeath(p);
-//                        continue;
-//                    }
-//                }
-//                if (hdamage){
-//                    if (y-1 <= p.tileY() && p.tileY() <= y+1){
-//                        //kill player and put on green team
-//                        Call.sendMessage(p.name + "[sky] DIED");
-//                        p.setTeam(Team.green);
-//                        Call.onPlayerDeath(p);
-//                    }
-//                }
-//            }
-//            //TODO: restart condition
-//        });
-
         //what does this do - dunno, it was there in hexedmod.
         netServer.assigner = (player, players) -> Team.sharded;
     }
@@ -222,6 +164,7 @@ public class BombermanMod extends Plugin{
             slate.center().removeNet();
         });
     }
+
 
     @Override
     public void registerServerCommands(CommandHandler handler){
