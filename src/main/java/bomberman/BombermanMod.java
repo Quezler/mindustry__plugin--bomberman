@@ -22,6 +22,9 @@ public class BombermanMod extends Plugin{
     private final Rules rules = new Rules();
 
     private BombermanGenerator generator;
+    //game started
+    private boolean started = false;
+    private boolean countdown = false;
 
     @Override
     public void init(){
@@ -29,6 +32,7 @@ public class BombermanMod extends Plugin{
         rules.tags.put("bomberman", "true");
         rules.infiniteResources = true;
         rules.canGameOver = false;
+        rules.playerDamageMultiplier = 0f;
 
         //Todo: check for min 2 players and have a countdown (~ 10 seconds)
         //if game is already running -> spectator mode
@@ -36,21 +40,40 @@ public class BombermanMod extends Plugin{
             if(!active()) return;
 
             event.player.kill();
-            event.player.setTeam(Structs.random(teams));
-            event.player.dead = false;
 
+            event.player.dead = true;
+
+            //playerGroup.size() will update after this event!
+            //too many players
+            if (playerGroup.size() > 4 || started){
+                event.player.setTeam(dead);
+                setLocationTile(event.player, 2, 2);
+                event.player.sendMessage("\nThe game has already started. You entered [accent]spectator[] mode.\n");
+            } else if (playerGroup.size() < 1){
+                Call.onInfoMessage("Minimum 2 players are required to play [sky]Bomberman.[]\nThe countdown will start if a second player joins.");
+            } else if (countdown) {
+                //min 2 players, let them now that the game will start soon
+                event.player.sendMessage("The game will start [accent]very[] soon.");
+            } else {
+                Call.sendMessage("Bomberman will start in 10 seconds...");
+                //assign players to team in 10 seconds and start the game
+                this.countdown = true;
+                Timer.schedule(() -> startGame(), 10f);
+            }
+            /*
             //set location
             Call.onPositionSet(event.player.con, generator.spawns[0][0]*8, generator.spawns[0][1]*8);
             event.player.setNet(generator.spawns[0][0]*8, generator.spawns[0][1]*8);
             event.player.set(generator.spawns[0][0]*8, generator.spawns[0][1]*8);
 
             event.player.mech = Powerup.copper.mech;
-            event.player.heal();
+            event.player.heal();*/
         });
 
-        //block flying over walls
+
         Events.on(Trigger.update, () -> {
             if(!active()) return;
+            if(!started) return;
 
             for (Player p: playerGroup){
                 if (!Structs.contains(teams, p.getTeam())) continue;
@@ -102,6 +125,14 @@ public class BombermanMod extends Plugin{
                 }
             }
             //TODO: check if there is only one player alive
+            if(playerGroup.count(p -> Structs.contains(teams, p.getTeam())) <= 1){ //potential == 0
+                Call.onInfoMessage("[accent] --- Game Ended --- []\n" + playerGroup.find(p -> !p.dead).name + "[] won!\n\n[sky]The map will reset in 10 seconds.");
+                //TODO: reset or change maps after 10 seconds and maybe kick all players.
+                Call.onPlayerDeath(playerGroup.find(p -> !p.dead)); //remove
+                this.started = false;
+                this.countdown = false;
+            }
+
         });
 
         Events.on(BlockBuildEndEvent.class, event -> {
@@ -165,6 +196,26 @@ public class BombermanMod extends Plugin{
         });
     }
 
+    private void startGame(){
+        if(playerGroup.size() < 2){
+            //abort -- player left
+            Call.sendMessage("[scarlet]Not enough players to start a game...");
+            this.countdown = false;
+            return;
+        }
+        for (int index = 0; index < playerGroup.size(); index++){
+            if (index == 4) break;
+            Player p = playerGroup.all().get(index);
+            p.dead = false;
+            setLocationTile(p, generator.spawns[index][0], generator.spawns[index][1]);
+            p.setTeam(teams[index]);
+            p.mech = Powerup.copper.mech;
+            p.heal();
+        }
+        started = true;
+        Call.sendMessage("[green]Game Started[]\n[accent]Dash[] to place a nuke.");
+    }
+
 
     @Override
     public void registerServerCommands(CommandHandler handler){
@@ -181,5 +232,11 @@ public class BombermanMod extends Plugin{
 
     public boolean active(){
         return state.rules.tags.getBool("bomberman") && !state.is(State.menu);
+    }
+
+    private void setLocationTile(Player p, int x, int y){
+        Call.onPositionSet(p.con, x*8, y*8);
+        p.setNet(x*8, y*8);
+        p.set(x*8, y*8);
     }
 }
