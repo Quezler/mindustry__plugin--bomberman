@@ -105,7 +105,7 @@ public class BombermanMod extends Plugin{
         Events.on(BlockBuildEndEvent.class, event -> {
             if(!event.breaking) return;
 
-            if(event.tile.block() instanceof BuildBlock && (((BuildEntity)event.tile.ent()).previous == pallete.blockade || slate(event.tile).state.powerup()) {
+            if(event.tile.block() instanceof BuildBlock && (((BuildEntity)event.tile.ent()).previous == pallete.blockade || slate(event.tile).state.powerup())) {
                 slate(event.tile).state = Slate.State.empty;
             }
         });
