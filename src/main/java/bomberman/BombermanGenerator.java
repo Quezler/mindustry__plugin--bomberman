@@ -18,7 +18,7 @@ public class BombermanGenerator extends Generator{
     public static final Pallete pallete = Structs.random(Pallete.values());
 
     BombermanGenerator(){
-        super(size, size);
+        super(grid * 3, grid * 3);
     }
 
     @Override
