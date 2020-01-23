@@ -41,20 +41,18 @@ public class BombermanMod extends Plugin{
 
             event.player.kill();
 
-            //run below if min 2 players!
-            //event.player.setTeam(Structs.random(teams));
-            event.player.dead = false;
+            event.player.dead = true;
 
+            //playerGroup.size() will update after this event!
             //too many players
             if (playerGroup.size() > 4 || started){
                 event.player.setTeam(dead);
                 setLocationTile(event.player, 2, 2);
                 event.player.sendMessage("\nThe game has already started. You entered [accent]spectator[] mode.\n");
-
-            } else if (playerGroup.size() < 2){
+            } else if (playerGroup.size() < 1){
                 Call.onInfoMessage("Minimum 2 players are required to play [sky]Bomberman.[]\nThe countdown will start if a second player joins.");
             } else if (countdown) {
-                //let them now that the game will start soon
+                //min 2 players, let them now that the game will start soon
                 event.player.sendMessage("The game will start [accent]very[] soon.");
             } else {
                 Call.sendMessage("Bomberman will start in 10 seconds...");
@@ -75,10 +73,7 @@ public class BombermanMod extends Plugin{
 
         Events.on(Trigger.update, () -> {
             if(!active()) return;
-
-//            if(!started){
-//                //prevent all actions, "waiting for players"
-//            }
+            if(!started) return;
 
             for (Player p: playerGroup){
                 if (!Structs.contains(teams, p.getTeam())) continue;
@@ -133,7 +128,7 @@ public class BombermanMod extends Plugin{
             if(playerGroup.count(p -> Structs.contains(teams, p.getTeam())) <= 1){ //potential == 0
                 Call.onInfoMessage("[accent] --- Game Ended --- []\n" + playerGroup.find(p -> !p.dead).name + "[] won!\n\n[sky]The map will reset in 10 seconds.");
                 //TODO: reset or change maps after 10 seconds and maybe kick all players.
-
+                Call.onPlayerDeath(playerGroup.find(p -> !p.dead)); //remove
                 this.started = false;
                 this.countdown = false;
             }
@@ -211,6 +206,7 @@ public class BombermanMod extends Plugin{
         for (int index = 0; index < playerGroup.size(); index++){
             if (index == 4) break;
             Player p = playerGroup.all().get(index);
+            p.dead = false;
             setLocationTile(p, generator.spawns[index][0], generator.spawns[index][1]);
             p.setTeam(teams[index]);
             p.mech = Powerup.copper.mech;
