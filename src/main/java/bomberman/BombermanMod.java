@@ -127,7 +127,7 @@ public class BombermanMod extends Plugin{
                 if(p.isBoosting){
                     Slate over = slate(tile(p));
 
-                    if(bombs.get(p.getTeam(), 0) >= 2) return; // 2 bombs per team max
+                    if(bombs.get(p.getTeam(), 0) >= bombs(p.getTeam())) return;
 
                     if(over.state == Slate.State.empty){
                         over.state = Slate.State.bomb;

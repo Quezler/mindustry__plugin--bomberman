@@ -43,6 +43,14 @@ public class Bomberman{
         }
     }
 
+    public static int bombs(Team team){
+        final int[] tmp = {0};
+        playerGroup.all().each(p -> {
+            if(p.getTeam() == team) tmp[0] += Powerup.player(p).reactors;
+        });
+        return tmp[0];
+    }
+
 
     public static Phase phase = Phase.playing;
 
