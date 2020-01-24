@@ -131,7 +131,7 @@ public class BombermanMod extends Plugin{
                         }
                     }
 
-                    slates(Slate::place);
+                    slates(Slate::place); // fixme: breaks/freezes currently placed nukes
                     playerGroup.all().each(syncer -> netServer.clientCommands.handleMessage("/sync", syncer));
                     Call.onConstructFinish(tmp.center(), Blocks.air, -1, (byte)0, Team.derelict, true);
                     tmp.state = Slate.State.empty;
