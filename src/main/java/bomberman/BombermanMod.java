@@ -41,6 +41,9 @@ public class BombermanMod extends Plugin{
         Events.on(PlayerJoin.class, event -> {
             if(!active()) return;
 
+            event.player.dead = false;
+            setLocationTile(player, world.width() / 2, world.height() / 2);
+
 //            event.player.kill();
 //            event.player.setTeam(Structs.random(teams));
 //            event.player.mech = Powerup.copper.mech;
@@ -81,7 +84,7 @@ public class BombermanMod extends Plugin{
         Events.on(Trigger.update, () -> {
             if(!active()) return;
 
-            if(phase != Phase.resetting && playerGroup.size() > 0 && playerGroup.count(p -> !p.isDead()) == 0){
+            if(phase != Phase.resetting && playerGroup.size() > 0 && playerGroup.count(p -> !p.isDead() && p.getTeam() != dead) == 0){
                 phase = Phase.resetting;
                 Timer.schedule(() -> reset(() -> phase = Phase.playing), 1.5f);
             }
@@ -232,6 +235,12 @@ public class BombermanMod extends Plugin{
                 player.heal();
                 player.dead = false;
                 setLocationTile(player, generator.spawns[team.id - 2][0], generator.spawns[team.id - 2][1]);
+            }
+
+            for(Player player : playerGroup.all().select(p -> p.getTeam() == dead)){
+                player.dead = false;
+                player.mech = Mechs.dart;
+                setLocationTile(player, world.width() / 2, world.height() / 2);
             }
 
             callback.run();
