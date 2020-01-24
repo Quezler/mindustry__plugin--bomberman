@@ -61,7 +61,7 @@ public class BombermanMod extends Plugin{
                     Call.onInfoMessage("[scarlet]Not enough players to start a new game...");
                     phase = Phase.waiting;
                 } else if(playerGroup.size() > 1) {
-                    Call.onInfoToast("[sky]Resetting the map!", 5f);
+                    Call.onInfoToast("[sky]Resetting the map!", 3f);
                     phase = Phase.resetting;
                     Timer.schedule(() -> reset(() -> phase = Phase.playing), 1.5f);
                 }
