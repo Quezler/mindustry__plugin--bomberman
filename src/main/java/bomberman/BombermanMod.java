@@ -169,15 +169,15 @@ public class BombermanMod extends Plugin{
                 // had problems in the past
                 if(event.tile == null) return;
                 Call.onDeconstructFinish(event.tile, event.tile.block(), event.player.getID());
-                event.player.sendMessage("[scarlet] Don't build blocks!");
-
-                event.player.applyEffect(StatusEffects.freezing, 180f);
-                event.player.applyEffect(StatusEffects.tarred, 180f);
-                event.player.damage(60f);
-                if (event.player.dead){
-                    event.player.setTeam(dead);
-                    Call.sendMessage(event.player.name + "[sky] DIED[] (too much building)");
-                }
+//                event.player.sendMessage("[scarlet] Don't build blocks!");
+//
+//                event.player.applyEffect(StatusEffects.freezing, 180f);
+//                event.player.applyEffect(StatusEffects.tarred, 180f);
+//                event.player.damage(60f);
+//                if (event.player.dead){
+//                    event.player.setTeam(dead);
+//                    Call.sendMessage(event.player.name + "[sky] DIED[] (too much building)");
+//                }
             }
         });
 
