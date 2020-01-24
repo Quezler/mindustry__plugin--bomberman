@@ -8,10 +8,10 @@ import mindustry.world.*;
 
 
 public enum Powerup{
-    copper    (Mechs.alpha, Slate.State.copper    ,  7, 1, 2),
-    titanium  (Mechs.delta, Slate.State.titanium  , 14, 2, 2),
-    plastanium(Mechs.tau  , Slate.State.plastanium, 12, 1, 3),
-    surge     (Mechs.omega, Slate.State.surge     , 20, 3, 2);
+    copper    (Mechs.alpha, Slate.State.copper    ,  7, 1, 2), // default, any other upgrade is better
+    titanium  (Mechs.delta, Slate.State.titanium  , 14, 2, 2), // faster & more powerful explosions
+    plastanium(Mechs.tau  , Slate.State.plastanium, 10, 1, 3), // fast & more overall explosions
+    surge     (Mechs.omega, Slate.State.surge     , 20, 3, 2); // fastest & most powerful explosions
 
     public final Mech mech;
     public final Slate.State slate;
