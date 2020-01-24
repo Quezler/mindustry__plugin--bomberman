@@ -5,6 +5,7 @@ import arc.math.*;
 
 import arc.struct.*;
 
+import arc.util.*;
 import mindustry.entities.type.*;
 import mindustry.game.*;
 import mindustry.world.*;
@@ -23,6 +24,8 @@ public class Bomberman{
 
     public static ObjectIntMap<Team> bombs = new ObjectIntMap<>();
     public static ObjectMap<Tile, Player> nukes = new ObjectMap<>();
+
+    public static Pallete pallete = Structs.random(Pallete.values());
 
     // resolve tile from player
     public static Tile tile(Player player){

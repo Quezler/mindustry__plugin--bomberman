@@ -31,7 +31,7 @@ public enum Powerup{
 
     public static Powerup wall(Block block){
         for(Powerup powerup : values()){
-            if(powerup.slate.block == block) return powerup;
+            if(powerup.slate.block.get() == block) return powerup;
         }
 
         return null;

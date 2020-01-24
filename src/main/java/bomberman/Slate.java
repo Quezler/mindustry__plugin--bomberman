@@ -8,7 +8,6 @@ import mindustry.gen.*;
 import mindustry.world.*;
 
 import static bomberman.Bomberman.*;
-import static bomberman.BombermanGenerator.pallete;
 
 import static mindustry.Vars.world;
 
@@ -58,8 +57,8 @@ public class Slate{
 
     // places either 1 big or 9 small ones
     public void place(){
-        if(state.single) set(center(), state.block);
-        if(!state.single) compass(tile -> set(tile, state.block));
+        if(state.single) set(center(), state.block.get());
+        if(!state.single) compass(tile -> set(tile, state.block.get()));
     }
 
     protected void set(Tile tile, Block block){
@@ -78,12 +77,13 @@ public class Slate{
     }
 
     enum State{
-        // default
+        // specials
         undefined(pallete.fallback, true),
+        pyroland(Blocks.illuminator, true),
 
         // board
-        wall (pallete.wall, false),
-        scrap(pallete.blockade, true),
+        wall (() -> pallete.wall, false),
+        scrap(() -> pallete.blockade, true),
         bomb(Blocks.thoriumReactor, true),
         empty(Blocks.air, true),
 
@@ -93,10 +93,15 @@ public class Slate{
         plastanium(Blocks.plastaniumWall, true),
         surge     (Blocks.surgeWall, true);
 
-        public Block block;
+        public Prov<Block> block;
         public boolean single;
 
         State(Block block, boolean single){
+            this.block = () -> block;
+            this.single = single;
+        }
+
+        State(Prov<Block> block, boolean single){
             this.block = block;
             this.single = single;
         }

@@ -13,12 +13,12 @@ import mindustry.game.EventType.*;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.plugin.*;
+import mindustry.world.*;
 import mindustry.world.blocks.*;
 import mindustry.world.blocks.BuildBlock.*;
 
 import static arc.util.Log.info;
 import static bomberman.Bomberman.*;
-import static bomberman.BombermanGenerator.pallete;
 import static mindustry.Vars.*;
 
 public class BombermanMod extends Plugin{
@@ -117,6 +117,22 @@ public class BombermanMod extends Plugin{
                     p.mech = tmp2.mech;
                     p.heal();
                     //remove powerup wall by building an airtile on top :thinking:
+                    Call.onConstructFinish(tmp.center(), Blocks.air, -1, (byte)0, Team.derelict, true);
+                    tmp.state = Slate.State.empty;
+                }
+
+                // pallete switcher
+                if(tmp.state == Slate.State.pyroland){
+                    pallete = Structs.random(Pallete.values());
+
+                    for(int x = 0; x < world.width(); x++){
+                        for(int y = 0; y < world.height(); y++){
+                            world.getTiles()[x][y].setFloor(pallete.floor);
+                        }
+                    }
+
+                    slates(Slate::place);
+                    playerGroup.all().each(syncer -> netServer.clientCommands.handleMessage("/sync", syncer));
                     Call.onConstructFinish(tmp.center(), Blocks.air, -1, (byte)0, Team.derelict, true);
                     tmp.state = Slate.State.empty;
                 }

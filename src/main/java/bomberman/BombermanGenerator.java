@@ -14,8 +14,6 @@ import static mindustry.Vars.*;
 // class that generates the map
 public class BombermanGenerator extends Generator{
 
-    public static final Pallete pallete = Structs.random(Pallete.values());
-
     BombermanGenerator(){
         super(grid * 3, grid * 3);
     }
@@ -95,6 +93,13 @@ public class BombermanGenerator extends Generator{
             if(!Mathf.chance(0.025)) return;
 
             slate.state = Structs.random(Powerup.values()).slate;
+        });
+
+        slates(slate -> {
+            if(slate.state != State.scrap) return;
+            if(!Mathf.chance(0.01)) return;
+
+            slate.state = State.pyroland;
         });
 
     }
