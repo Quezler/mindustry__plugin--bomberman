@@ -2,6 +2,7 @@ package bomberman;
 
 import arc.*;
 import arc.func.*;
+import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
 import mindustry.content.*;
@@ -233,6 +234,8 @@ public class BombermanMod extends Plugin{
 
         Timer.schedule(() -> {
 
+            Array<Spawn> spawns = generator.getSpawns();
+            spawns.shuffle();
             for(Team team : teams){
                 Player player = playerGroup.all().select(p -> p.getTeam() == dead).random();
                 if(player == null) continue;
@@ -240,7 +243,7 @@ public class BombermanMod extends Plugin{
                 player.mech = Powerup.starter.mech;
                 player.heal();
                 player.dead = false;
-                setLocationTile(player, generator.spawns[team.id - 2][0], generator.spawns[team.id - 2][1]);
+                setLocationPosition(player, spawns.get(team.id - 2));
             }
 
             callback.run();
@@ -289,9 +292,9 @@ public class BombermanMod extends Plugin{
         return state.rules.tags.getBool("bomberman") && !state.is(State.menu);
     }
 
-    private void setLocationTile(Player p, int x, int y){
-        Call.onPositionSet(p.con, x * tilesize, y * tilesize);
-        p.setNet(x * tilesize, y * tilesize);
-        p.set(x * tilesize, y * tilesize);
+    private void setLocationPosition(Player p, Position pos){
+        Call.onPositionSet(p.con, pos.getX(), pos.getY());
+        p.setNet(pos.getX(), pos.getY());
+        p.set(pos.getX(), pos.getY());
     }
 }

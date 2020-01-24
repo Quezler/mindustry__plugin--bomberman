@@ -9,11 +9,10 @@ import mindustry.maps.generators.*;
 import mindustry.world.*;
 
 import static bomberman.Bomberman.*;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
 
 // class that generates the map
 public class BombermanGenerator extends Generator{
-    public final int[][] spawns = getSpawns();//{{4, 4}};
 
     public static final Pallete pallete = Structs.random(Pallete.values());
 
@@ -100,7 +99,7 @@ public class BombermanGenerator extends Generator{
 
     }
 
-    public int[][] getSpawns(){
+    public Array<Spawn> getSpawns(){
         int [][] ret = new int[4][2];
         Slate tmp = new Slate(0,0);
         int counter = 0;
@@ -112,6 +111,14 @@ public class BombermanGenerator extends Generator{
                 counter++;
             }
         }
-        return ret;
+
+        Array<Spawn> spawns = new Array<>();
+        for(int[] coords : ret){
+            spawns.add(new Spawn(coords[0] * tilesize, coords[1] * tilesize));
+        }
+
+//        Log.info(spawns);
+
+        return spawns;
     }
 }
