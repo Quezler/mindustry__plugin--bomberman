@@ -9,7 +9,7 @@ import mindustry.entities.type.*;
 import mindustry.game.*;
 import mindustry.world.*;
 
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
 
 // constants and some utility functions
 public class Bomberman{
@@ -41,4 +41,12 @@ public class Bomberman{
             }
         }
     }
+
+
+    public static Phase phase = Phase.playing;
+
+    enum Phase{
+        playing,
+        resetting,
+    };
 }

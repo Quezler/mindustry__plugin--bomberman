@@ -73,8 +73,7 @@ public class Slate{
     public void destroy(){
         Core.app.post(() -> {
             if(center().entity != null) center().entity.onDeath();
-//            center().removeNet();
-            Call.onDeconstructFinish(center(), pallete.blockade, -1);
+            if(state != State.wall) Call.onDeconstructFinish(center(), pallete.blockade, -1);
         });
     }
 
@@ -116,6 +115,10 @@ public class Slate{
             if(this == scrap) return false;
 
             return true;
+        }
+
+        public boolean air(){
+            return (this == undefined || this == empty);
         }
     }
 }

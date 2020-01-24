@@ -42,7 +42,9 @@ public class BombermanGenerator extends Generator{
         seed();
 
         // place slates (gen)
-        slates(Slate::place);
+        slates(s -> {
+            if(s.state == State.wall) s.place();
+        });
 
         world.setMap(new Map(StringMap.of("name", mapname)));
     }
@@ -61,7 +63,7 @@ public class BombermanGenerator extends Generator{
 
         // set walls (grid)
         slates(slate -> {
-            if(slate.state != State.undefined) return;
+            if(!slate.state.air()) return;
             if((slate.x % 2) == 0) slate.state = State.wall;
             if((slate.y % 2) == 0) slate.state = State.wall;
             if((slate.x % 2) == 0 ^ (slate.y % 2) == 0) slate.state = State.undefined;
@@ -69,7 +71,7 @@ public class BombermanGenerator extends Generator{
 
         // fill map (scrap)
         slates(slate -> {
-            if(slate.state != State.undefined) return;
+            if(!slate.state.air()) return;
             if((slate.x % 2) == 1) slate.state = State.scrap;
             if((slate.y % 2) == 1) slate.state = State.scrap;
         });

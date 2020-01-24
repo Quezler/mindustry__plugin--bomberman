@@ -2,6 +2,7 @@ package bomberman;
 
 import arc.*;
 import arc.func.*;
+import arc.struct.*;
 import arc.util.*;
 import mindustry.content.*;
 import mindustry.core.GameState.*;
@@ -40,27 +41,32 @@ public class BombermanMod extends Plugin{
         Events.on(PlayerJoin.class, event -> {
             if(!active()) return;
 
-            event.player.kill();
+//            event.player.kill();
+//            event.player.setTeam(Structs.random(teams));
+//            event.player.mech = Powerup.copper.mech;
+//            event.player.dead = false;
+//            setLocationTile(event.player, generator.spawns[0][0], generator.spawns[0][1]);
 
-            event.player.dead = true;
+//            event.player.dead = true;
+//
+//            //playerGroup.size() will update after this event!
+//            //too many players
+//            if (playerGroup.size() > 4 || started){
+//                event.player.setTeam(dead);
+//                setLocationTile(event.player, 2, 2);
+//                event.player.sendMessage("\nThe game has already started. You entered [accent]spectator[] mode.\n");
+//            } else if (playerGroup.size() < 1){
+//                Call.onInfoMessage("Minimum 2 players are required to play [sky]Bomberman.[]\nThe countdown will start if a second player joins.");
+//            } else if (countdown) {
+//                //min 2 players, let them now that the game will start soon
+//                event.player.sendMessage("The game will start [accent]very[] soon.");
+//            } else {
+//                Call.sendMessage("Bomberman will start in 10 seconds...");
+//                //assign players to team in 10 seconds and start the game
+//                this.countdown = true;
+//                Timer.schedule(() -> startGame(), 10f);
+//            }
 
-            //playerGroup.size() will update after this event!
-            //too many players
-            if (playerGroup.size() > 4 || started){
-                event.player.setTeam(dead);
-                setLocationTile(event.player, 2, 2);
-                event.player.sendMessage("\nThe game has already started. You entered [accent]spectator[] mode.\n");
-            } else if (playerGroup.size() < 1){
-                Call.onInfoMessage("Minimum 2 players are required to play [sky]Bomberman.[]\nThe countdown will start if a second player joins.");
-            } else if (countdown) {
-                //min 2 players, let them now that the game will start soon
-                event.player.sendMessage("The game will start [accent]very[] soon.");
-            } else {
-                Call.sendMessage("Bomberman will start in 10 seconds...");
-                //assign players to team in 10 seconds and start the game
-                this.countdown = true;
-                Timer.schedule(() -> startGame(), 10f);
-            }
             /*
             //set location
             Call.onPositionSet(event.player.con, generator.spawns[0][0]*8, generator.spawns[0][1]*8);
@@ -74,18 +80,27 @@ public class BombermanMod extends Plugin{
 
         Events.on(Trigger.update, () -> {
             if(!active()) return;
-            if(!started) return;
+
+            if(phase != Phase.resetting && playerGroup.size() > 0 && playerGroup.count(p -> !p.isDead()) == 0){
+                phase = Phase.resetting;
+                Timer.schedule(() -> reset(() -> phase = Phase.playing), 1.5f);
+            }
+        });
+
+        Events.on(Trigger.update, () -> {
+            if(!active()) return;
+//            if(!started) return;
 
             for (Player p: playerGroup){
                 if (!Structs.contains(teams, p.getTeam())) continue;
 
                 Slate tmp = slate(tile(p));
 
-                // player is death
-                if(p.dead){
-                    p.setTeam(dead);
-                    Call.sendMessage(p.name + "[sky] died in an [accent]explosion...");
-                }
+//                // player is death
+//                if(p.dead){
+//                    p.setTeam(dead);
+//                    Call.sendMessage(p.name + "[sky] died in an [accent]explosion...");
+//                }
 
                 // player is on the same tile as a powerup
                 if(tmp.state.powerup()){
@@ -103,10 +118,10 @@ public class BombermanMod extends Plugin{
                     p.applyEffect(StatusEffects.freezing, 60f);
                     p.applyEffect(StatusEffects.tarred, 60f);
                     p.damage(2.5f);
-                    if (p.dead){
-                        p.setTeam(dead);
-                        Call.sendMessage(p.name + "[sky] DIED[] (too much flying)");
-                    }
+//                    if (p.dead){
+//                        p.setTeam(dead);
+//                        Call.sendMessage(p.name + "[sky] DIED[] (too much flying)");
+//                    }
                 }
 
                 if(p.isBoosting){
@@ -125,14 +140,14 @@ public class BombermanMod extends Plugin{
                     }
                 }
             }
-            //TODO: check if there is only one player alive
-            if(playerGroup.count(p -> Structs.contains(teams, p.getTeam())) <= 1){ //potential == 0
-                Call.onInfoMessage("[accent] --- Game Ended --- []\n" + playerGroup.find(p -> !p.dead).name + "[] won!\n\n[sky]The map will reset in 10 seconds.");
-                //TODO: reset or change maps after 10 seconds and maybe kick all players.
-                Call.onPlayerDeath(playerGroup.find(p -> !p.dead)); //remove
-                this.started = false;
-                this.countdown = false;
-            }
+//            //TODO: check if there is only one player alive
+//            if(playerGroup.count(p -> Structs.contains(teams, p.getTeam())) <= 1){ //potential == 0
+//                Call.onInfoMessage("[accent] --- Game Ended --- []\n" + playerGroup.find(p -> !p.dead).name + "[] won!\n\n[sky]The map will reset in 10 seconds.");
+//                //TODO: reset or change maps after 10 seconds and maybe kick all players.
+//                Call.onPlayerDeath(playerGroup.find(p -> !p.dead)); //remove
+//                this.started = false;
+//                this.countdown = false;
+//            }
 
         });
 
@@ -162,6 +177,7 @@ public class BombermanMod extends Plugin{
 
         Events.on(BlockDestroyEvent.class, event -> {
             if(event.tile.block() != Blocks.thoriumReactor) return;
+            if(phase != Phase.playing) return;
             slate(event.tile).state = Slate.State.empty;
 
             bombs.getAndIncrement(event.tile.getTeam(), 0, -1);
@@ -176,7 +192,7 @@ public class BombermanMod extends Plugin{
                     if (tmp.state == Slate.State.empty || tmp.state.powerup()) tmp.compass(Fire::create);
 
                     if (tmp.state == Slate.State.scrap){
-                        omeowamoushindeiru(tmp);
+                        tmp.destroy();
                         tmp.compass(Fire::create);
                         tmp.state = Slate.State.empty;
                         break;
@@ -187,46 +203,57 @@ public class BombermanMod extends Plugin{
             }
         });
 
-        //what does this do - dunno, it was there in hexedmod.
-        netServer.assigner = (player, players) -> Team.sharded;
-    }
-
-    private void omeowamoushindeiru(Slate slate){
-        Core.app.post(() -> {
-            slate.center().entity.onDeath();
-            slate.center().removeNet();
-        });
+        netServer.assigner = (player, players) -> dead;
     }
 
     public void reset(Runnable callback){
+        for(Player player : playerGroup){
+            if(!player.isDead()) player.kill();
+            player.setTeam(dead);
+        }
+
         generator.seed();
         slates(slate -> {
             float delay = (slate.x + slate.y) / 20f;
             Timer.schedule(slate::destroy, delay);
-            Timer.schedule(slate::place, delay + 0.5f);
+            Timer.schedule(slate::place, delay + 0.25f);
         });
-        Timer.schedule(callback, ((slates.length + slates[0].length) / 20f) + 0.5f);
+
+        Timer.schedule(() -> {
+
+            for(Team team : teams){
+                Player player = playerGroup.all().select(p -> p.getTeam() == dead).random();
+                if(player == null) continue;
+                player.setTeam(team);
+                player.mech = Powerup.copper.mech;
+                player.heal();
+                player.dead = false;
+                setLocationTile(player, generator.spawns[team.id - 2][0], generator.spawns[team.id - 2][1]);
+            }
+
+            callback.run();
+        }, ((slates.length + slates[0].length) / 20f) + 0.5f);
     }
 
-    private void startGame(){
-        if(playerGroup.size() < 2){
-            //abort -- player left
-            Call.sendMessage("[scarlet]Not enough players to start a game...");
-            this.countdown = false;
-            return;
-        }
-        for (int index = 0; index < playerGroup.size(); index++){
-            if (index == 4) break;
-            Player p = playerGroup.all().get(index);
-            p.dead = false;
-            setLocationTile(p, generator.spawns[index][0], generator.spawns[index][1]);
-            p.setTeam(teams[index]);
-            p.mech = Powerup.copper.mech;
-            p.heal();
-        }
-        started = true;
-        Call.sendMessage("[green]Game Started[]\n[accent]Dash[] to place a nuke.");
-    }
+//    private void startGame(){
+//        if(playerGroup.size() < 2){
+//            //abort -- player left
+//            Call.sendMessage("[scarlet]Not enough players to start a game...");
+//            this.countdown = false;
+//            return;
+//        }
+//        for (int index = 0; index < playerGroup.size(); index++){
+//            if (index == 4) break;
+//            Player p = playerGroup.all().get(index);
+//            p.dead = false;
+//            setLocationTile(p, generator.spawns[index][0], generator.spawns[index][1]);
+//            p.setTeam(teams[index]);
+//            p.mech = Powerup.copper.mech;
+//            p.heal();
+//        }
+//        started = true;
+//        Call.sendMessage("[green]Game Started[]\n[accent]Dash[] to place a nuke.");
+//    }
 
 
     @Override
