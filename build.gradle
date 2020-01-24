@@ -9,9 +9,14 @@ repositories{
     maven{ url 'https://www.jitpack.io' }
 }
 
+ext{
+    mindustryVersion = "v103"
+    arcVersion = "v103"
+}
+
 dependencies{
-    compileOnly "com.github.Anuken.Arc:arc-core:ff62d39e0fa294117a885010b05b2b29412b4024"
-    compileOnly "com.github.Anuken.Mindustry:core:6e6f8f3cdbf3c896335af11a631a31e3c5692262"
+    compileOnly "com.github.Anuken.Arc:arc-core:$arcVersion"
+    compileOnly "com.github.Anuken.Mindustry:core:$mindustryVersion"
 }
 
 jar{
