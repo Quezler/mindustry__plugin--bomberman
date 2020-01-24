@@ -45,9 +45,9 @@ public class BombermanMod extends Plugin{
             event.player.setTeam(dead);
 
             if(phase == Phase.playing) {
-                Call.onInfoToast(event.player.con,"\nThe game has already started. You entered [accent]spectator[] mode.\n", 10f);
+                Call.onInfoToast(event.player.con,"\nThe game has already started. You entered [accent]spectator[] mode.\n", 5f);
             }else if(phase == Phase.waiting && playerGroup.size()<1){
-                Call.onInfoToast(event.player.con, "Minimum 2 players are required to play [sky]Bomberman.[]\nThe game will start if a second player joins.", 10f);
+                Call.onInfoToast(event.player.con, "Minimum 2 players are required to play [sky]Bomberman.[]\nThe game will start if a second player joins.", 5f);
             }
         });
 
