@@ -81,9 +81,15 @@ public class BombermanMod extends Plugin{
         Events.on(Trigger.update, () -> {
             if(!active()) return;
 
+            // reset the map when there are no alive players
             if(phase != Phase.resetting && playerGroup.size() > 0 && playerGroup.count(p -> !p.isDead()) == 0){
                 phase = Phase.resetting;
                 Timer.schedule(() -> reset(() -> phase = Phase.playing), 1.5f);
+            }
+
+            // if there is only one player/team standing, slowly kill it to prevent a deadlock
+            if(phase != Phase.resetting && playerGroup.size() > 0 && playerGroup.count(p -> !p.isDead()) == 1){
+                playerGroup.all().select(p -> !p.isDead()).each(p -> p.applyEffect(StatusEffects.corroded, 60f));
             }
         });
 
