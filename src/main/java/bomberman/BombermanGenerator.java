@@ -39,6 +39,18 @@ public class BombermanGenerator extends Generator{
             }
         }
 
+        seed();
+
+        // place slates (gen)
+        slates(Slate::place);
+
+        world.setMap(new Map(StringMap.of("name", mapname)));
+    }
+
+    public void seed(){
+        // reset state (default)
+        slates(slate -> slate.state = State.undefined);
+
         // set walls (border)
         slates(slate -> {
             if(slate.x == 0) slate.state = State.wall; // left
@@ -84,10 +96,6 @@ public class BombermanGenerator extends Generator{
             slate.state = Structs.random(Powerup.values()).slate;
         });
 
-        // place slates (gen)
-        slates(Slate::place);
-
-        world.setMap(new Map(StringMap.of("name", mapname)));
     }
 
     public int[][] getSpawns(){

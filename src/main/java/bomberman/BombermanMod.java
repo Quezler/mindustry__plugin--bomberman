@@ -1,6 +1,7 @@
 package bomberman;
 
 import arc.*;
+import arc.func.*;
 import arc.util.*;
 import mindustry.content.*;
 import mindustry.core.GameState.*;
@@ -136,6 +137,7 @@ public class BombermanMod extends Plugin{
         });
 
         Events.on(BlockBuildEndEvent.class, event -> {
+            if(event.player == null) return;
             if(!active()) return;
 
             if(event.breaking){
@@ -159,8 +161,8 @@ public class BombermanMod extends Plugin{
         });
 
         Events.on(BlockDestroyEvent.class, event -> {
-            slate(event.tile).state = Slate.State.empty;
             if(event.tile.block() != Blocks.thoriumReactor) return;
+            slate(event.tile).state = Slate.State.empty;
 
             bombs.getAndIncrement(event.tile.getTeam(), 0, -1);
             Slate reactor = slate(event.tile);
@@ -196,6 +198,16 @@ public class BombermanMod extends Plugin{
         });
     }
 
+    public void reset(Runnable callback){
+        generator.seed();
+        slates(slate -> {
+            float delay = (slate.x + slate.y) / 20f;
+            Timer.schedule(slate::destroy, delay);
+            Timer.schedule(slate::place, delay + 0.5f);
+        });
+        Timer.schedule(callback, ((slates.length + slates[0].length) / 20f) + 0.5f);
+    }
+
     private void startGame(){
         if(playerGroup.size() < 2){
             //abort -- player left
@@ -227,6 +239,10 @@ public class BombermanMod extends Plugin{
             state.rules = rules.copy();
             logic.play();
             netServer.openServer();
+        });
+
+        handler.register("reset", "Test reset animation.", args -> {
+            reset(() -> Log.info("Reset complete!"));
         });
     }
 

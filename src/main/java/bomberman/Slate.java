@@ -1,7 +1,10 @@
 package bomberman;
 
+import arc.*;
 import arc.func.*;
+import arc.util.*;
 import mindustry.content.*;
+import mindustry.gen.*;
 import mindustry.world.*;
 
 import static bomberman.Bomberman.*;
@@ -55,12 +58,24 @@ public class Slate{
 
     // places either 1 big or 9 small ones
     public void place(){
-        if(state.single) center().setBlock(state.block, cake);
-        if(!state.single) compass(tile -> tile.setBlock(state.block, cake));
+        if(state.single) set(center(), state.block);
+        if(!state.single) compass(tile -> set(tile, state.block));
+    }
+
+    protected void set(Tile tile, Block block){
+        Call.onConstructFinish(tile, block, -1, (byte)0, cake, true);
     }
 
     public Slate adjecent(Direction direction){
         return slates[x + direction.x][y + direction.y];
+    }
+
+    public void destroy(){
+        Core.app.post(() -> {
+            if(center().entity != null) center().entity.onDeath();
+//            center().removeNet();
+            Call.onDeconstructFinish(center(), pallete.blockade, -1);
+        });
     }
 
     enum State{
