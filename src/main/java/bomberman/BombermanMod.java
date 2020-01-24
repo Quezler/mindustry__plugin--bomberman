@@ -282,10 +282,6 @@ public class BombermanMod extends Plugin{
             logic.play();
             netServer.openServer();
         });
-
-        handler.register("reset", "Test reset animation.", args -> {
-            reset(() -> Log.info("Reset complete!"));
-        });
     }
 
     public boolean active(){
