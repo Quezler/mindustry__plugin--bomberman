@@ -207,6 +207,9 @@ public class BombermanMod extends Plugin{
     }
 
     public void reset(Runnable callback){
+
+        bombs.clear();
+
         for(Player player : playerGroup){
             if(!player.isDead()) player.kill();
             player.setTeam(dead);
