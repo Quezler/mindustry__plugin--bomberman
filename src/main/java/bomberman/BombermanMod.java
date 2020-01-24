@@ -45,8 +45,10 @@ public class BombermanMod extends Plugin{
             event.player.setTeam(dead);
 
             if(phase == Phase.playing) {
+                //TODO: fade message
                 event.player.sendMessage("\nThe game has already started. You entered [accent]spectator[] mode.\n");
             }else if(phase == Phase.waiting && playerGroup.size()<1){
+                //TODO: fade message
                 Call.onInfoMessage("Minimum 2 players are required to play [sky]Bomberman.[]\nThe game will start if a second player joins.");
             }
         });
@@ -70,6 +72,7 @@ public class BombermanMod extends Plugin{
             // if there is only one player/team standing, slowly kill it to prevent a deadlock
             if(phase != Phase.resetting && playerGroup.size() > 0 && playerGroup.count(p -> !p.isDead()) == 1){
                 if(phase != Phase.ending){
+                    //TODO: change to fade message
                     Call.onInfoMessage("[accent] --- Game Ended --- []\n" + playerGroup.find(p -> !p.dead).name + "[] won!\n\n[sky]The map will reset soon.");
                     playerGroup.find(p -> !p.dead).heal(); //small delay
                     phase = Phase.ending;
