@@ -22,6 +22,7 @@ public class Bomberman{
     public final static Team cake = Team.sharded;
 
     public static ObjectIntMap<Team> bombs = new ObjectIntMap<>();
+    public static ObjectMap<Tile, Player> nukes = new ObjectMap<>();
 
     // resolve tile from player
     public static Tile tile(Player player){

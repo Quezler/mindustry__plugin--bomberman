@@ -133,10 +133,10 @@ public class BombermanMod extends Plugin{
                         over.state = Slate.State.bomb;
                         Call.onConstructFinish(over.center(), Blocks.thoriumReactor, p.id, (byte)0, p.getTeam(), true);
 
-                        Powerup tmp3 = Powerup.player(p);
-                        if(tmp3 != null) Timer.schedule(() -> Call.transferItemTo(Items.thorium, tmp3.thorium, p.x, p.y, over.center()), 0.25f);
+                        Timer.schedule(() -> Call.transferItemTo(Items.thorium, Powerup.player(p).thorium, p.x, p.y, over.center()), 0.25f);
 
                         bombs.getAndIncrement(p.getTeam(), 0, 1);
+                        nukes.put(over.center(), p);
                     }
                 }
             }
@@ -186,6 +186,8 @@ public class BombermanMod extends Plugin{
 
             Slate tmp;
             for(Direction direction : Direction.values()){
+                int broken = 0;
+                int max = Powerup.player(nukes.get(event.tile)).breaks;
                 tmp = reactor.adjecent(direction);
                 do{
                     if (tmp.state == Slate.State.wall) break;
@@ -195,7 +197,7 @@ public class BombermanMod extends Plugin{
                         tmp.destroy();
                         tmp.compass(Fire::create);
                         tmp.state = Slate.State.empty;
-                        break;
+                        if(++broken >= max) break;
                     }
 
                     tmp = tmp.adjecent(direction);
@@ -209,6 +211,7 @@ public class BombermanMod extends Plugin{
     public void reset(Runnable callback){
 
         bombs.clear();
+        nukes.clear();
 
         for(Player player : playerGroup){
             if(!player.isDead()) player.kill();
@@ -228,7 +231,7 @@ public class BombermanMod extends Plugin{
                 Player player = playerGroup.all().select(p -> p.getTeam() == dead).random();
                 if(player == null) continue;
                 player.setTeam(team);
-                player.mech = Powerup.copper.mech;
+                player.mech = Powerup.starter.mech;
                 player.heal();
                 player.dead = false;
                 setLocationTile(player, generator.spawns[team.id - 2][0], generator.spawns[team.id - 2][1]);

@@ -8,19 +8,23 @@ import mindustry.world.*;
 
 
 public enum Powerup{
-    copper    (Mechs.alpha, Slate.State.copper    ,  7),
-    titanium  (Mechs.delta, Slate.State.titanium  , 14),
-    plastanium(Mechs.tau  , Slate.State.plastanium, 12),
-    surge     (Mechs.omega, Slate.State.surge     , 20);
+    copper    (Mechs.alpha, Slate.State.copper    ,  7, 1),
+    titanium  (Mechs.delta, Slate.State.titanium  , 14, 2),
+    plastanium(Mechs.tau  , Slate.State.plastanium, 12, 1),
+    surge     (Mechs.omega, Slate.State.surge     , 20, 3);
 
     public final Mech mech;
     public final Slate.State slate;
     public final int thorium;
+    public final int breaks;
 
-    Powerup(Mech mech, Slate.State block, int thorium){
+    public static final Powerup starter = copper;
+
+    Powerup(Mech mech, Slate.State block, int thorium, int breaks){
         this.mech = mech;
         this.slate = block;
         this.thorium = thorium;
+        this.breaks = breaks;
     }
 
     public static Powerup wall(Block block){
@@ -36,6 +40,6 @@ public enum Powerup{
             if(powerup.mech == player.mech) return powerup;
         }
 
-        return null;
+        return starter;
     }
 }
