@@ -235,8 +235,8 @@ public class BombermanMod extends Plugin{
     }
 
     private void setLocationTile(Player p, int x, int y){
-        Call.onPositionSet(p.con, x*8, y*8);
-        p.setNet(x*8, y*8);
-        p.set(x*8, y*8);
+        Call.onPositionSet(p.con, x * tilesize, y * tilesize);
+        p.setNet(x * tilesize, y * tilesize);
+        p.set(x * tilesize, y * tilesize);
     }
 }
