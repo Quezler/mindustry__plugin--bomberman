@@ -58,10 +58,10 @@ public class BombermanMod extends Plugin{
             // reset the map when there are no alive players
             if(phase != Phase.resetting && playerGroup.size() > 0 && playerGroup.count(p -> !p.isDead()) == 0){
                 if(playerGroup.size() < 2 && phase != Phase.waiting){
-                    Call.sendMessage("[scarlet]Not enough players to start a new game...");
+                    Call.onInfoMessage("[scarlet]Not enough players to start a new game...");
                     phase = Phase.waiting;
                 } else if(playerGroup.size() > 1) {
-                    Call.sendMessage("[sky]Resetting the map!");
+                    Call.onInfoToast("[sky]Resetting the map!", 5f);
                     phase = Phase.resetting;
                     Timer.schedule(() -> reset(() -> phase = Phase.playing), 1.5f);
                 }
