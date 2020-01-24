@@ -121,9 +121,6 @@ public class BombermanGenerator extends Generator{
         for(int[] coords : ret){
             spawns.add(new Spawn(coords[0] * tilesize, coords[1] * tilesize));
         }
-
-//        Log.info(spawns);
-
         return spawns;
     }
 }
