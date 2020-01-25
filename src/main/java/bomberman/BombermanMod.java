@@ -13,7 +13,6 @@ import mindustry.game.EventType.*;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.plugin.*;
-import mindustry.world.*;
 import mindustry.world.blocks.*;
 import mindustry.world.blocks.BuildBlock.*;
 
@@ -33,7 +32,7 @@ public class BombermanMod extends Plugin{
         rules.tags.put("bomberman", "true");
         rules.infiniteResources = true;
         rules.canGameOver = false;
-        rules.playerDamageMultiplier = 0f;
+        rules.playerDamageMultiplier = 0.1f;
 
         //Todo: check for min 2 players and have a countdown (~ 10 seconds)
         //if game is already running -> spectator mode

@@ -80,6 +80,7 @@ public class Slate{
         // specials
         undefined(pallete.fallback, true),
         pyroland(Blocks.illuminator, true),
+        healing(Blocks.repairPoint, true),
 
         // board
         wall (() -> pallete.wall, false),

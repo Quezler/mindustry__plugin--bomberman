@@ -5,6 +5,7 @@ import arc.struct.*;
 import arc.util.*;
 import bomberman.Slate.*;
 import mindustry.content.*;
+import mindustry.entities.traits.*;
 import mindustry.entities.type.*;
 import mindustry.game.*;
 import mindustry.gen.*;
@@ -23,6 +24,7 @@ public class Cooties{
         put(State.surge.block.get()     , player -> powerup(Powerup.surge     , player));
 
         put(State.pyroland.block.get()  , player -> pallete());
+        put(State.healing.block.get()   , Player::heal);
     }};
 
     public static void handle(Player player, Slate slate){

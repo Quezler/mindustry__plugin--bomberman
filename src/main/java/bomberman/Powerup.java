@@ -29,14 +29,6 @@ public enum Powerup{
         this.reactors = reactors;
     }
 
-    public static Powerup wall(Block block){
-        for(Powerup powerup : values()){
-            if(powerup.slate.block.get() == block) return powerup;
-        }
-
-        return null;
-    }
-
     public static Powerup player(Player player){
         for(Powerup powerup : values()){
             if(powerup.mech == player.mech) return powerup;

@@ -103,6 +103,14 @@ public class BombermanGenerator extends Generator{
             slate.state = State.empty;
         });
 
+        // seed repairs (random)
+        slates(slate -> {
+            if(slate.state != State.scrap) return;
+            if(!Mathf.chance(0.015)) return;
+
+            slate.state = State.healing;
+        });
+
         // seed lamps (random)
         slates(slate -> {
             if(slate.state != State.scrap) return;
