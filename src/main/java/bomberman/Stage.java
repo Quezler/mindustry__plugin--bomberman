@@ -80,23 +80,21 @@ public class Stage{
 
                 // bombs
                 if(player.isBoosting){
-
-                    if(bombs.get(player.getTeam(), 0) >= bombs(player.getTeam())) continue;
+                    if(bombs(player) >= Powerup.player(player).reactors) continue; // out of bombs
 
                     if(on.state == Slate.State.empty){
                         on.state = Slate.State.bomb;
-                        Call.onConstructFinish(on.center(), Blocks.thoriumReactor, player.id, (byte)0, player.getTeam(), true);
+                        Call.onConstructFinish(on.center(), Blocks.thoriumReactor, player.id, (byte)0, cake, true);
 
                         Timer.schedule(() -> Call.transferItemTo(Items.thorium, Powerup.player(player).thorium, player.x, player.y, on.center()), 0.25f);
 
-                        bombs.getAndIncrement(player.getTeam(), 0, 1);
                         nukes.put(on.center(), player);
                     }
                 }
             }
 
             // end the game if there is only one alive left
-            if(playerGroup.count(p -> !p.isDead()) <= 1) stage.set(gameover);
+            if(playerGroup.count(p -> !p.isDead()) <= 0) stage.set(gameover);
         }
     },
 

@@ -23,7 +23,6 @@ public class Bomberman{
     public final static Team dead = Team.derelict;
     public final static Team cake = Team.sharded;
 
-    public static ObjectIntMap<Team> bombs = new ObjectIntMap<>();
     public static ObjectMap<Tile, Player> nukes = new ObjectMap<>();
 
     public static Pallete pallete = Structs.random(Pallete.values());
@@ -47,12 +46,8 @@ public class Bomberman{
         }
     }
 
-    public static int bombs(Team team){
-        final int[] tmp = {0};
-        playerGroup.all().each(p -> {
-            if(p.getTeam() == team) tmp[0] += Powerup.player(p).reactors;
-        });
-        return tmp[0];
+    public static int bombs(Player player){
+        return Array.with(nukes).count(nuke -> nuke.value == player);
     }
 
     public static StateMachine stage = new StateMachine();

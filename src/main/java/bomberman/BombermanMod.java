@@ -79,7 +79,6 @@ public class BombermanMod extends Plugin{
             if(stage.current() != Stage.playing) return;
             slate(event.tile).state = Slate.State.empty;
 
-            bombs.getAndIncrement(event.tile.getTeam(), 0, -1);
             Slate reactor = slate(event.tile);
             reactor.compass(Fire::create);
 
@@ -102,6 +101,8 @@ public class BombermanMod extends Plugin{
                     tmp = tmp.adjecent(direction);
                 }while(true);
             }
+
+            nukes.remove(event.tile);
         });
 
         netServer.assigner = (player, players) -> dead;
@@ -109,7 +110,6 @@ public class BombermanMod extends Plugin{
 
     public static void reset(Runnable callback){
 
-        bombs.clear();
         nukes.clear();
 
         for(Player player : playerGroup){
