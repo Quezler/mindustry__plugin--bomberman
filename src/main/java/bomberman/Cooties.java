@@ -58,7 +58,9 @@ public class Cooties{
             }
         }
 
-        slates(Slate::place);
+        slates(slate -> {
+            if(slate.state != State.bomb) slate.place();
+        });
 
         playerGroup.all().each(syncer -> netServer.clientCommands.handleMessage("/sync", syncer));
     }
