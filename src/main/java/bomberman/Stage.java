@@ -74,7 +74,7 @@ public class Stage{
 
     gameover = new UnitState(){
         public void entered(){
-            Call.onInfoToast("gameover", toast);
+//            Call.onInfoToast("gameover", toast);
         }
 
         public void update(){
