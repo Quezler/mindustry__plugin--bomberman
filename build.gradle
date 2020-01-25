@@ -26,8 +26,8 @@ jar{
     }
 }
 
-// gradle server && java -jar ./be/Mindustry-BE-Server-6855.jar
-// java -XstartOnFirstThread -jar ./be/Mindustry-BE-Desktop-6855.jar
+// gradle server && java -jar ./be/Mindustry-BE-Server-6917.jar
+// java -XstartOnFirstThread -jar ./be/Mindustry-BE-Desktop-6917.jar
 task server(){
     dependsOn "jar"
 
