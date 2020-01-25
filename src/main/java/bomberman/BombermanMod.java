@@ -87,7 +87,7 @@ public class BombermanMod extends Plugin{
                 int max = Powerup.player(nukes.get(event.tile)).breaks;
                 tmp = reactor.adjecent(direction);
                 do{
-                    if (tmp.state == Slate.State.wall) break;
+                    if (tmp.state == Slate.State.wall || tmp.state == Slate.State.bomb) break;
                     if (tmp.state == Slate.State.empty || (tmp.state.block.get().size == 1) && tmp.state.single) tmp.compass(Fire::create);
 
                     if (tmp.state == Slate.State.scrap){
