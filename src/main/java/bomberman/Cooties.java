@@ -16,21 +16,29 @@ import static mindustry.Vars.*;
 
 public class Cooties{
 
-    private static final ObjectMap<Block, Cons<Player>> map = new ObjectMap<Block, Cons<Player>>(){{
+    private static final ObjectMap<Block, Cons2<Player, Slate>> map = new ObjectMap<Block, Cons2<Player, Slate>>(){{
 
-        put(State.copper.block.get()    , player -> powerup(Powerup.copper    , player));
-        put(State.titanium.block.get()  , player -> powerup(Powerup.titanium  , player));
-        put(State.plastanium.block.get(), player -> powerup(Powerup.plastanium, player));
-        put(State.surge.block.get()     , player -> powerup(Powerup.surge     , player));
+        put(State.copper.block.get()    , (player, slate) -> powerup(Powerup.copper    , player));
+        put(State.titanium.block.get()  , (player, slate) -> powerup(Powerup.titanium  , player));
+        put(State.plastanium.block.get(), (player, slate) -> powerup(Powerup.plastanium, player));
+        put(State.surge.block.get()     , (player, slate) -> powerup(Powerup.surge     , player));
 
-        put(State.pyroland.block.get()  , player -> pallete());
-        put(State.healing.block.get()   , Player::heal);
+        put(State.pyroland.block.get()  , (player, slate) -> pallete());
+        put(State.healing.block.get()   , (player, slate) -> player.heal());
+        put(State.door.block.get()      , (player, slate) -> {
+            for(Direction direction : Direction.values()){
+                if(slate.adjecent(direction).state == State.scrap){
+                    slate.adjecent(direction).state = State.empty;
+                    slate.adjecent(direction).destroy();
+                }
+            }
+        });
     }};
 
     public static void handle(Player player, Slate slate){
 
         if(map.get(slate.center().block()) == null) return;
-        map.get(slate.center().block()).get(player);
+        map.get(slate.center().block()).get(player, slate);
 
         Call.onConstructFinish(slate.center(), Blocks.air, -1, (byte)0, Team.derelict, true);
         slate.state = Slate.State.empty;

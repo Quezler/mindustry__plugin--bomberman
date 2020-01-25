@@ -119,6 +119,14 @@ public class BombermanGenerator extends Generator{
             slate.state = State.pyroland;
         });
 
+        // seed doors (random)
+        slates(slate -> {
+            if(slate.state != State.scrap) return;
+            if(!Mathf.chance(0.020)) return;
+
+            slate.state = State.door;
+        });
+
     }
 
     public Array<Spawn> getSpawns(){
