@@ -50,6 +50,8 @@ public class Cooties{
             }
         }
 
+        slates(Slate::place);
+
         playerGroup.all().each(syncer -> netServer.clientCommands.handleMessage("/sync", syncer));
     }
 }
