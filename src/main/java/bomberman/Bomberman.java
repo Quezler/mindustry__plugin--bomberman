@@ -7,6 +7,7 @@ import arc.struct.*;
 
 import arc.util.*;
 import mindustry.entities.type.*;
+import mindustry.entities.units.*;
 import mindustry.game.*;
 import mindustry.world.*;
 
@@ -54,13 +55,5 @@ public class Bomberman{
         return tmp[0];
     }
 
-
-    public static Phase phase = Phase.waiting;
-
-    enum Phase{
-        playing,
-        resetting,
-        waiting,
-        ending,
-    };
+    public static StateMachine stage = new StateMachine();
 }
