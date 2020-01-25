@@ -68,7 +68,7 @@ public class Stage{
             }
 
             // end the game if there is only one alive left
-            if(playerGroup.count(p -> !p.isDead()) <= 0) stage.set(gameover);
+            if(playerGroup.count(p -> !p.isDead()) <= 1) stage.set(gameover);
         }
     },
 

@@ -48,10 +48,6 @@ public class Cooties{
             }
         }
 
-        slates(slate -> {
-            if(slate.center().block() != Blocks.thoriumReactor) slate.place();
-        });
-
         playerGroup.all().each(syncer -> netServer.clientCommands.handleMessage("/sync", syncer));
     }
 }
