@@ -79,7 +79,10 @@ public class Stage{
 
         public void update(){
             // slowly kill the last remaining player(s)
-            playerGroup.all().select(p -> !p.isDead()).each(p -> p.applyEffect(StatusEffects.corroded, 60f));
+            playerGroup.all().select(p -> !p.isDead()).each(p -> {
+                p.applyEffect(StatusEffects.corroded, 60f);
+                p.damage(1f);
+            });
 
             // reset the map when there are no alive players
             if(playerGroup.size() > 0 && playerGroup.count(p -> !p.isDead()) == 0) stage.set(resetting);
