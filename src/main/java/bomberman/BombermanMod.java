@@ -44,11 +44,11 @@ public class BombermanMod extends Plugin{
             event.player.dead = true;
             event.player.setTeam(dead);
 
-            if(phase == Phase.playing) {
-                Call.onInfoToast(event.player.con,"\nThe game has already started. You entered [accent]spectator[] mode.\n", 5f);
-            }else if(phase == Phase.waiting && playerGroup.size()<1){
-                Call.onInfoToast(event.player.con, "Minimum 2 players are required to play [sky]Bomberman.[]\nThe game will start if a second player joins.", 5f);
-            }
+//            if(phase == Phase.playing) {
+//                Call.onInfoToast(event.player.con,"\nThe game has already started. You entered [accent]spectator[] mode.\n", 5f);
+//            }else if(phase == Phase.waiting && playerGroup.size()<1){
+//                Call.onInfoToast(event.player.con, "Minimum 2 players are required to play [sky]Bomberman.[]\nThe game will start if a second player joins.", 5f);
+//            }
         });
 
 
@@ -57,11 +57,8 @@ public class BombermanMod extends Plugin{
 
             // reset the map when there are no alive players
             if(phase != Phase.resetting && playerGroup.size() > 0 && playerGroup.count(p -> !p.isDead()) == 0){
-                if(playerGroup.size() < 2 && phase != Phase.waiting){
-                    Call.onInfoMessage("[scarlet]Not enough players to start a new game...");
-                    phase = Phase.waiting;
-                } else if(playerGroup.size() > 1) {
-                    Call.onInfoToast("[sky]Resetting the map!", 3f);
+                if(playerGroup.size() >= 1) {
+//                    Call.onInfoToast("[sky]Resetting the map!", 3f);
                     phase = Phase.resetting;
                     Timer.schedule(() -> reset(() -> phase = Phase.playing), 1.5f);
                 }
@@ -70,7 +67,7 @@ public class BombermanMod extends Plugin{
             // if there is only one player/team standing, slowly kill it to prevent a deadlock
             if(phase != Phase.resetting && playerGroup.size() > 0 && playerGroup.count(p -> !p.isDead()) == 1){
                 if(phase != Phase.ending){
-                    Call.onInfoToast("[accent] --- Game Ended --- []\n" + playerGroup.find(p -> !p.dead).name + "[] won!\n\n[sky]The map will reset soon.", 5f);
+//                    Call.onInfoToast("[accent] --- Game Ended --- []\n" + playerGroup.find(p -> !p.dead).name + "[] won!\n\n[sky]The map will reset soon.", 5f);
                     playerGroup.find(p -> !p.dead).heal(); //small delay
                     phase = Phase.ending;
                 }
@@ -88,11 +85,11 @@ public class BombermanMod extends Plugin{
 
                 Slate tmp = slate(tile(p));
 
-                // player is death
-                if(p.dead){
-                    p.setTeam(dead);
-                    Call.sendMessage(p.name + "[sky] died...");
-                }
+//                // player is death
+//                if(p.dead){
+//                    p.setTeam(dead);
+//                    Call.sendMessage(p.name + "[sky] died...");
+//                }
 
                 // player is on the same tile as a powerup
                 if(tmp.state.powerup()){
@@ -118,7 +115,8 @@ public class BombermanMod extends Plugin{
 
                     slates(slate -> {
                         if(slate.center().block() != Blocks.thoriumReactor) slate.place();
-                    }); // fixme: breaks/freezes currently placed nukes
+                    });
+
                     playerGroup.all().each(syncer -> netServer.clientCommands.handleMessage("/sync", syncer));
                     Call.onConstructFinish(tmp.center(), Blocks.air, -1, (byte)0, Team.derelict, true);
                     tmp.state = Slate.State.empty;
@@ -161,7 +159,7 @@ public class BombermanMod extends Plugin{
                 // had problems in the past
                 if(event.tile == null) return;
                 Call.onDeconstructFinish(event.tile, event.tile.block(), event.player.getID());
-                event.player.sendMessage("[scarlet] Don't build blocks!");
+//                event.player.sendMessage("[scarlet] Don't build blocks!");
                 event.player.applyEffect(StatusEffects.freezing, 180f);
                 event.player.applyEffect(StatusEffects.tarred, 180f);
             }
@@ -234,27 +232,6 @@ public class BombermanMod extends Plugin{
             callback.run();
         }, ((slates.length + slates[0].length) / 20f) + 0.5f);
     }
-
-//    private void startGame(){
-//        if(playerGroup.size() < 2){
-//            //abort -- player left
-//            Call.sendMessage("[scarlet]Not enough players to start a game...");
-//            this.countdown = false;
-//            return;
-//        }
-//        for (int index = 0; index < playerGroup.size(); index++){
-//            if (index == 4) break;
-//            Player p = playerGroup.all().get(index);
-//            p.dead = false;
-//            setLocationTile(p, generator.spawns[index][0], generator.spawns[index][1]);
-//            p.setTeam(teams[index]);
-//            p.mech = Powerup.copper.mech;
-//            p.heal();
-//        }
-//        started = true;
-//        Call.sendMessage("[green]Game Started[]\n[accent]Dash[] to place a nuke.");
-//    }
-
 
     @Override
     public void registerServerCommands(CommandHandler handler){
