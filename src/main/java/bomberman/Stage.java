@@ -42,34 +42,8 @@ public class Stage{
 
                 Slate on = slate(tile(player));
 
-                // powerups
-                if(on.state.powerup()){
-                    Powerup tmp2 = Powerup.wall(on.center().block());
-                    if(tmp2 == null) return;
-                    player.mech = tmp2.mech;
-                    player.heal();
-                    Call.onConstructFinish(on.center(), Blocks.air, -1, (byte)0, Team.derelict, true);
-                    on.state = Slate.State.empty;
-                }
-
-                // illuminators
-                if(on.state == Slate.State.pyroland){
-                    pallete = Structs.random(Pallete.values());
-
-                    for(int x = 0; x < world.width(); x++){
-                        for(int y = 0; y < world.height(); y++){
-                            world.getTiles()[x][y].setFloor(pallete.floor);
-                        }
-                    }
-
-                    slates(slate -> {
-                        if(slate.center().block() != Blocks.thoriumReactor) slate.place();
-                    });
-
-                    playerGroup.all().each(syncer -> netServer.clientCommands.handleMessage("/sync", syncer));
-                    Call.onConstructFinish(on.center(), Blocks.air, -1, (byte)0, Team.derelict, true);
-                    on.state = Slate.State.empty;
-                }
+                // touching special tiles
+                Cooties.handle(player, on);
 
                 // walls
                 if(!on.state.flyable()){
@@ -94,7 +68,7 @@ public class Stage{
             }
 
             // end the game if there is only one alive left
-            if(playerGroup.count(p -> !p.isDead()) <= 1) stage.set(gameover);
+            if(playerGroup.count(p -> !p.isDead()) <= 0) stage.set(gameover);
         }
     },
 
