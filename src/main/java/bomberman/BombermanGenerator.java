@@ -95,6 +95,15 @@ public class BombermanGenerator extends Generator{
             slate.state = Structs.random(Powerup.values()).slate;
         });
 
+        // seed air (random)
+        slates(slate -> {
+            if(slate.state != State.scrap) return;
+            if(!Mathf.chance(0.05)) return;
+
+            slate.state = State.empty;
+        });
+
+        // seed lamps (random)
         slates(slate -> {
             if(slate.state != State.scrap) return;
             if(!Mathf.chance(0.01)) return;
