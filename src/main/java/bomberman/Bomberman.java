@@ -55,10 +55,12 @@ public class Bomberman{
     }
 
 
-    public static Phase phase = Phase.playing;
+    public static Phase phase = Phase.waiting;
 
     enum Phase{
         playing,
         resetting,
+        waiting,
+        ending,
     };
 }
