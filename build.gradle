@@ -10,8 +10,8 @@ repositories{
 }
 
 ext{
-    mindustryVersion = "v103"
-    arcVersion = "v103"
+    mindustryVersion = "v104"
+    arcVersion = "v104"
 }
 
 dependencies{
