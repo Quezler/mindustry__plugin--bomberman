@@ -15,6 +15,7 @@ import mindustry.gen.*;
 import mindustry.plugin.*;
 import mindustry.world.blocks.*;
 import mindustry.world.blocks.BuildBlock.*;
+import mindustry.world.blocks.units.RepairPoint;
 
 import static arc.util.Log.info;
 import static bomberman.Bomberman.*;
@@ -33,6 +34,8 @@ public class BombermanMod extends Plugin{
         rules.infiniteResources = true;
         rules.canGameOver = false;
         rules.playerDamageMultiplier = 0.1f;
+
+        ((RepairPoint)Blocks.repairPoint).repairRadius = 0.1f;
 
         //Todo: check for min 2 players and have a countdown (~ 10 seconds)
         //if game is already running -> spectator mode
