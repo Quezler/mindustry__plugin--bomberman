@@ -39,6 +39,7 @@ public class Stage{
 
             for(Player player : playerGroup){
                 if(!Structs.contains(teams, player.getTeam())) continue; // not in an alive team
+                if(tile(player) == null) continue;
 
                 Slate on = slate(tile(player));
 
